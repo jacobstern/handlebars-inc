@@ -1,2 +1,7 @@
+jest.config.js
+babel.config.js
+babel.config.runtime.js
+webpack.config.js
+
 dist/
 vendor/

@@ -4,10 +4,12 @@
   "description": "",
   "main": "dist/cjs/index.js",
   "scripts": {
-    "test": "jest",
+    "prebuild": "rm -rf dist/",
     "build": "babel lib/ --out-dir dist/cjs",
     "prepublishOnly": "npm run build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "pretest": "webpack --mode=development",
+    "test": "jest"
   },
   "author": "Jacob Stern",
   "license": "MIT",
@@ -16,16 +18,20 @@
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "babel-jest": "^24.7.1",
+    "babel-loader": "^8.0.5",
     "eslint": "^5.16.0",
     "eslint-plugin-compat": "^3.1.1",
+    "expose-loader": "^0.7.5",
     "grunt": "^1.0.4",
     "jest": "^24.7.1",
-    "jest-cli": "^24.7.1"
+    "jest-cli": "^24.7.1",
+    "jsdom": "^14.0.0",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
   },
   "dependencies": {
-    "handlebars": "./vendor/handlebars.js"
-  },
-  "browserslist": [
-    "> 1%"
-  ]
+    "handlebars": "./vendor/handlebars.js",
+    "incremental-dom": "^0.6.0",
+    "parse5": "^5.1.0"
+  }
 }

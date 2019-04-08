@@ -1,8 +1,8 @@
-import handlebarsIdom from '../lib';
-import { readFileRelative } from './test-utils';
+import HandlebarsIDOM from '../lib';
+import { getHbsSource } from './test-core';
 
-test('can compile a file', async () => {
-  const hbs = await readFileRelative('./example/simple.hbs');
-  const template = handlebarsIdom.compile(hbs);
+test('can compile a file', () => {
+  let hbs = getHbsSource('if');
+  let template = HandlebarsIDOM.compile(hbs);
   expect(typeof template).toBe('function');
 });
