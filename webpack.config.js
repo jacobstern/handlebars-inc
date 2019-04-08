@@ -5,6 +5,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'runtime.js'
   },
+  entry: './src/runtime.js',
   module: {
     rules: [
       {
