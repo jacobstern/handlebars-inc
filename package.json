@@ -1,0 +1,31 @@
+{
+  "name": "handlebars-idom",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/cjs/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "babel lib/ --out-dir dist/cjs",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint ."
+  },
+  "author": "Jacob Stern",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "babel-jest": "^24.7.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-compat": "^3.1.1",
+    "grunt": "^1.0.4",
+    "jest": "^24.7.1",
+    "jest-cli": "^24.7.1"
+  },
+  "dependencies": {
+    "handlebars": "./vendor/handlebars.js"
+  },
+  "browserslist": [
+    "> 1%"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "extends": ["eslint:recommended", "plugin:compat/recommended"],
+  "env": {
+    "es6": true,
+    "shared-node-browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": "warn",
+    "no-var": "warn",
+    "no-unused-vars": "warn"
+  }
+}

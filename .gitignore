@@ -1,0 +1,6 @@
+# Build artifacts
+node_modules/
+dist/
+
+# Local development
+npm-debug.log
