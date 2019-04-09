@@ -11,7 +11,7 @@ test('renders a simple text template as a DOM fragment', () => {
   let handlebarsTemplate = Handlebars.compile(hbs);
   let handlebarsText = handlebarsTemplate({ name: 'Jake' });
   let handlebarsResult = normalizeHTML(handlebarsText);
-  let idomPrecompiled = HandlebarsIDOM.precompile(hbs);
+  let idomPrecompiled = HandlebarsIDOM.precompile(hbs, { idom: true });
   console.debug(idomPrecompiled);
   let dom = runInTestDOM(`
     var mainDiv = document.getElementById('main');
