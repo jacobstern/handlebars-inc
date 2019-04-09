@@ -10,9 +10,9 @@
   },
   "rules": {
     "no-console": "warn",
-    "no-var": "warn",
+    "no-var": "error",
     "no-unused-vars": "warn",
     "semi": "error",
-    "no-shadow": "warn"
+    "no-func-assign": "off"
   }
 }

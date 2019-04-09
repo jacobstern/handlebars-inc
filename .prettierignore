@@ -1,2 +1,4 @@
 vendor/
+
 lib/compiler/javascript-compiler.js
+lib/runtime.js

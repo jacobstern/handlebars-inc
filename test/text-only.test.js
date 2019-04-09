@@ -12,10 +12,12 @@ test('renders a simple text template as a DOM fragment', () => {
   let handlebarsText = handlebarsTemplate({ name: 'Jake' });
   let handlebarsResult = normalizeHTML(handlebarsText);
   let idomPrecompiled = HandlebarsIDOM.precompile(hbs);
+  console.debug(idomPrecompiled);
   let dom = runInTestDOM(`
     var mainDiv = document.getElementById('main');
     var template = HandlebarsIDOM.template(${idomPrecompiled});
-    IncrementalDOM.patch(mainDiv, template({ name: 'Jake' }));
+    var thunk = template({ name: 'Jake' });
+    IncrementalDOM.patch(mainDiv, thunk);
   `);
   let mainDiv = dom.window.document.getElementById('main');
   let domResult = normalizeHTML(mainDiv.innerHTML);
