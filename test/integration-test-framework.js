@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { Script } from 'vm';
+import parse5 from 'parse5';
 import { JSDOM } from 'jsdom';
 
-let hbsCache = {};
+let fileCache = {};
 
 function createRuntimeScript() {
   let idomBuildPath = path.join(__dirname, '../dist/runtime.js');
@@ -13,16 +14,16 @@ function createRuntimeScript() {
 
 let runtimeScript = createRuntimeScript();
 
-export function getHbsSource(name) {
-  let cached = hbsCache[name];
+export function readTestLocalFile(relativePath) {
+  let cached = fileCache[relativePath];
   if (!cached) {
-    let filePath = path.join(__dirname, 'hbs', name + '.hbs');
-    cached = hbsCache[name] = fs.readFileSync(filePath, 'utf8');
+    let filePath = path.join(__dirname, relativePath);
+    cached = fileCache[relativePath] = fs.readFileSync(filePath, 'utf8');
   }
   return cached;
 }
 
-export function runInTestDOM(scriptSrc) {
+export function runInTestDOM(...sources) {
   const dom = new JSDOM(
     `
     <!DOCTYPE html>
@@ -37,6 +38,12 @@ export function runInTestDOM(scriptSrc) {
     { runScripts: 'outside-only' }
   );
   dom.runVMScript(runtimeScript);
-  dom.runVMScript(new Script(scriptSrc));
+  for (let source of sources) {
+    dom.runVMScript(new Script(source));
+  }
   return dom;
+}
+
+export function normalizeHTML(fragment) {
+  return parse5.serialize(parse5.parseFragment(fragment));
 }

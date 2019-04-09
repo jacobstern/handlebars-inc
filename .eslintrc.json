@@ -12,6 +12,7 @@
     "no-console": "warn",
     "no-var": "warn",
     "no-unused-vars": "warn",
-    "semi": "error"
+    "semi": "error",
+    "no-shadow": "warn"
   }
 }

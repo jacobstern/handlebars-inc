@@ -1,21 +1,23 @@
 import Handlebars from 'handlebars';
-import parse5 from 'parse5';
-import { getHbsSource, runInTestDOM } from './integration-test-framework';
+import HandlebarsIDOM from '../lib';
+import {
+  readTestLocalFile,
+  normalizeHTML,
+  runInTestDOM
+} from './integration-test-framework';
 
 test('renders a simple text template as a DOM fragment', () => {
-  let hbs = getHbsSource('hello');
+  let hbs = readTestLocalFile('hbs/hello.hbs');
   let handlebarsTemplate = Handlebars.compile(hbs);
   let handlebarsText = handlebarsTemplate({ name: 'Jake' });
-  let handlebarsResult = parse5.parseFragment(handlebarsText);
+  let handlebarsResult = normalizeHTML(handlebarsText);
+  let idomPrecompiled = HandlebarsIDOM.precompile(hbs);
   let dom = runInTestDOM(`
-    let mainDiv = document.getElementById('main');
-  
-    let { text, patch } = IncrementalDOM;
-    patch(mainDiv, function () {
-      text('Hello Jake!');
-    })
+    var mainDiv = document.getElementById('main');
+    var template = HandlebarsIDOM.template(${idomPrecompiled});
+    IncrementalDOM.patch(mainDiv, template({ name: 'Jake' }));
   `);
   let mainDiv = dom.window.document.getElementById('main');
-  let domResult = parse5.parseFragment(mainDiv.innerHTML);
+  let domResult = normalizeHTML(mainDiv.innerHTML);
   expect(domResult).toEqual(handlebarsResult);
 });
