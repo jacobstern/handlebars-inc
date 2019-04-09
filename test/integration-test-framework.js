@@ -54,7 +54,8 @@ export function runIntegrationTests(configs) {
   configs.forEach(config => {
     describe(config.desc, () => {
       config.examples.forEach(example => {
-        test(example.desc, done => {
+        let testFn = example.only ? test.only : test;
+        testFn(example.desc, done => {
           let filePath = path.join(__dirname, 'examples', 'hbs', example.file);
           fs.readFile(filePath, { encoding: 'utf8' }, (err, hbsContent) => {
             if (err) {
