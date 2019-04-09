@@ -1,10 +1,10 @@
-import handlebars from 'handlebars';
+import Handlebars from 'handlebars';
 import parse5 from 'parse5';
-import { getHbsSource, runInTestDOM } from './test-core';
+import { getHbsSource, runInTestDOM } from './integration-test-framework';
 
 test('renders a simple text template as a DOM fragment', () => {
   let hbs = getHbsSource('hello');
-  let handlebarsTemplate = handlebars.compile(hbs);
+  let handlebarsTemplate = Handlebars.compile(hbs);
   let handlebarsText = handlebarsTemplate({ name: 'Jake' });
   let handlebarsResult = parse5.parseFragment(handlebarsText);
   let dom = runInTestDOM(`

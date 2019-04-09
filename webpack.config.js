@@ -13,7 +13,7 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
         options: {
-          configFile: path.join(__dirname, 'babel.config.runtime.js')
+          envName: 'runtime'
         }
       }
     ]

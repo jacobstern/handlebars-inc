@@ -4,12 +4,15 @@
   "description": "",
   "main": "dist/cjs/index.js",
   "scripts": {
-    "prebuild": "rm -rf dist/",
-    "build": "babel lib/ --out-dir dist/cjs",
+    "clean": "rimraf dist/",
+    "prebuild": "npm run clean",
+    "build": "babel lib/ --extensions \".ts,.js\" --out-dir dist/cjs",
     "prepublishOnly": "npm run build",
     "lint": "eslint .",
-    "pretest": "webpack --mode=development",
-    "test": "jest"
+    "runtime:dev": "webpack --mode=development",
+    "pretest": "npm run runtime:dev",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": "Jacob Stern",
   "license": "MIT",
@@ -17,6 +20,7 @@
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
+    "@babel/preset-typescript": "^7.3.3",
     "babel-jest": "^24.7.1",
     "babel-loader": "^8.0.5",
     "eslint": "^5.16.0",
@@ -26,10 +30,12 @@
     "jest": "^24.7.1",
     "jest-cli": "^24.7.1",
     "jsdom": "^14.0.0",
+    "rimraf": "^2.6.3",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   },
   "dependencies": {
+    "@types/parse5": "5.0.0",
     "handlebars": "./vendor/handlebars.js",
     "incremental-dom": "^0.6.0",
     "parse5": "^5.1.0"
