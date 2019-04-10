@@ -48,7 +48,7 @@ test('parses a fragment with an unclosed tag', () => {
   ]);
 });
 
-test.only('parses a fragment with unmatched closing tags', () => {
+test('parses a fragment with unmatched closing tags', () => {
   let result = parseFragment('</h1><p>Test</p></span>');
   expect(result.type).toBe('fullTags');
   expect(result.value.operations).toEqual([
