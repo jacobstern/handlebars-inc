@@ -19,7 +19,7 @@
       "file": "each.hbs"
     },
     {
-      "desc": "with an if clause that matches",
+      "desc": "with an if block helper that matches",
       "data": {
         "author": true,
         "firstName": "Sam",
@@ -28,11 +28,42 @@
       "file": "if.hbs"
     },
     {
-      "desc": "with an if clause that does not match",
+      "desc": "with an if block helper that does not match",
       "data": {
         "author": false
       },
       "file": "if.hbs"
+    },
+    {
+      "desc": "with an if/else block helper that matches",
+      "data": {
+        "author": true,
+        "firstName": "Sam",
+        "lastName": "Seder"
+      },
+      "file": "if-else.hbs"
+    },
+    {
+      "desc": "with an if/else block helper that does not match",
+      "data": {
+        "author": false
+      },
+      "file": "if-else.hbs"
+    },
+    {
+      "desc": "with an unless block helper that matches",
+      "data": {
+        "license": null
+      },
+      "file": "unless.hbs"
+    },
+    {
+      "desc": "with an unless block helper that doesn't match",
+      "data": {
+        "license": "MIT"
+      },
+      "file": "unless.hbs",
+      "expected": "<div class=\"entry\">\n</div>"
     }
   ]
 }

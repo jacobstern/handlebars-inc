@@ -46,6 +46,11 @@ export function runInTestDOM(...sources) {
   return dom;
 }
 
+function getExpectedFromHandlebars(hbsContent, data) {
+  let handlebarsTemplate = Handlebars.compile(hbsContent);
+  return handlebarsTemplate(data);
+}
+
 export function runIntegrationTests(configs) {
   configs.forEach(config => {
     describe(config.desc, () => {
@@ -62,11 +67,13 @@ export function runIntegrationTests(configs) {
             if (err) {
               throw err;
             }
-            let handlebarsTemplate = Handlebars.compile(hbsContent);
-            let handlebarsText = handlebarsTemplate(example.data);
+            let expected = example.expected;
+            if (expected == null) {
+              expected = getExpectedFromHandlebars(hbsContent, example.data);
+            }
             let bundledHandlebarsTemplate = HandlebarsIDOM.compile(hbsContent);
             let bundledHandlebarsText = bundledHandlebarsTemplate(example.data);
-            expect(bundledHandlebarsText).toBe(handlebarsText);
+            expect(bundledHandlebarsText).toBe(expected);
             let idomPrecompiled = HandlebarsIDOM.precompile(hbsContent, {
               idom: true
             });
@@ -79,7 +86,7 @@ export function runIntegrationTests(configs) {
               IncrementalDOM.patch(mainDiv, thunk);
             `);
             let mainDiv = dom.window.document.getElementById('main');
-            expect(mainDiv.innerHTML).toEqual(handlebarsText);
+            expect(mainDiv.innerHTML).toEqual(expected);
             done();
           });
         });
