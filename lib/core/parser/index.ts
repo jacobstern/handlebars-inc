@@ -1,5 +1,5 @@
 import parse5 from 'parse5';
-import { DOMOperation, PropertyValuePair } from './dom-operation';
+import { DOMOperation, PropertyValuePair } from '../dom-operation';
 
 export interface FullyParsedResult {
   operations: DOMOperation[];
