@@ -1,0 +1,40 @@
+{
+  "desc": "the compiler implements built-in helpers properly",
+  "examples": [
+    {
+      "desc": "with a basic usage of each",
+      "data": {
+        "title": "Hello world!",
+        "comments": [
+          {
+            "subject": "Nice job",
+            "body": "This is a good post."
+          },
+          {
+            "subject": "Minor correction",
+            "body": ""
+          }
+        ]
+      },
+      "file": "each.hbs",
+      "skip": true
+    },
+    {
+      "desc": "with an if clause that matches",
+      "data": {
+        "author": true,
+        "firstName": "Test",
+        "lastName": "Person"
+      },
+      "file": "if.hbs",
+      "skip": true
+    },
+    {
+      "desc": "with an if clause that does not match",
+      "data": {
+        "author": false
+      },
+      "file": "if.hbs"
+    }
+  ]
+}
