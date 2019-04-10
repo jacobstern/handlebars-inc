@@ -1,4 +1,4 @@
-import { parseFragment } from '../lib/core/parser';
+import { parseFragment } from '../../lib/core/parser';
 
 test('returns empty for empty string', () => {
   const result = parseFragment('');
@@ -11,8 +11,7 @@ test('parses a text node', () => {
   expect(result.type).toBe('fullyParsed');
   expect(result.value.operations).toHaveLength(1);
   const text = result.value.operations[0];
-  expect(text.type).toBe('text');
-  expect(text.value.text).toBe('Hello ');
+  expect(text).toEqual({ type: 'text', value: { text: 'Hello ' } });
 });
 
 test('parses an element with contents and attributes', () => {
