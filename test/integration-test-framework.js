@@ -1,12 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { Script } from 'vm';
-import parse5 from 'parse5';
 import Handlebars from 'handlebars';
 import HandlebarsIDOM from '../lib';
 import { JSDOM } from 'jsdom';
-
-let fileCache = {};
 
 function createRuntimeScript() {
   let idomBuildPath = path.join(__dirname, '../dist/runtime.js');
@@ -16,16 +13,7 @@ function createRuntimeScript() {
 
 let runtimeScript = createRuntimeScript();
 
-export function readTestLocalFile(relativePath) {
-  let cached = fileCache[relativePath];
-  if (!cached) {
-    let filePath = path.join(__dirname, relativePath);
-    cached = fileCache[relativePath] = fs.readFileSync(filePath, 'utf8');
-  }
-  return cached;
-}
-
-export function runInTestDOM(...sources) {
+function runInTestDOM(...sources) {
   const dom = new JSDOM(
     `
     <!DOCTYPE html>
