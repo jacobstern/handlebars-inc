@@ -13,8 +13,7 @@
       "data": {
         "title": "A Title"
       },
-      "file": "element-content.hbs",
-      "skip": true
+      "file": "element-content.hbs"
     },
     {
       "desc": "with nested tags",
@@ -23,8 +22,7 @@
         "lastName": "Stern",
         "content": "Hello world!"
       },
-      "file": "nested-tags.hbs",
-      "skip": true
+      "file": "nested-tags.hbs"
     }
   ]
 }
