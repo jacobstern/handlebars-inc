@@ -53,135 +53,111 @@ test('parses a fragment with nested tags', () => {
   // prettier-ignore
   let result = parseFragment('<div class="foo"><h1>Hello</h1><div class="content"><strong>Test</strong></div></div>');
   expect(result.type).toBe('fullyParsed');
-  expect(result.value.operations).toMatchInlineSnapshot(`
-            Array [
-              Object {
-                "type": "elementOpen",
-                "value": Object {
-                  "propertyValuePairs": Array [
-                    Array [
-                      "class",
-                      "foo",
-                    ],
-                  ],
-                  "tagName": "div",
-                },
-              },
-              Object {
-                "type": "elementOpen",
-                "value": Object {
-                  "propertyValuePairs": Array [],
-                  "tagName": "h1",
-                },
-              },
-              Object {
-                "type": "text",
-                "value": Object {
-                  "text": "Hello",
-                },
-              },
-              Object {
-                "type": "elementClose",
-                "value": Object {
-                  "tagName": "h1",
-                },
-              },
-              Object {
-                "type": "elementOpen",
-                "value": Object {
-                  "propertyValuePairs": Array [
-                    Array [
-                      "class",
-                      "content",
-                    ],
-                  ],
-                  "tagName": "div",
-                },
-              },
-              Object {
-                "type": "elementOpen",
-                "value": Object {
-                  "propertyValuePairs": Array [],
-                  "tagName": "strong",
-                },
-              },
-              Object {
-                "type": "text",
-                "value": Object {
-                  "text": "Test",
-                },
-              },
-              Object {
-                "type": "elementClose",
-                "value": Object {
-                  "tagName": "strong",
-                },
-              },
-              Object {
-                "type": "elementClose",
-                "value": Object {
-                  "tagName": "div",
-                },
-              },
-              Object {
-                "type": "elementClose",
-                "value": Object {
-                  "tagName": "div",
-                },
-              },
-            ]
-      `);
+  expect(result.value.operations).toEqual([
+    {
+      type: 'elementOpen',
+      value: {
+        propertyValuePairs: [['class', 'foo']],
+        tagName: 'div'
+      }
+    },
+    {
+      type: 'elementOpen',
+      value: {
+        propertyValuePairs: [],
+        tagName: 'h1'
+      }
+    },
+    {
+      type: 'text',
+      value: {
+        text: 'Hello'
+      }
+    },
+    {
+      type: 'elementClose',
+      value: {
+        tagName: 'h1'
+      }
+    },
+    {
+      type: 'elementOpen',
+      value: {
+        propertyValuePairs: [['class', 'content']],
+        tagName: 'div'
+      }
+    },
+    {
+      type: 'elementOpen',
+      value: {
+        propertyValuePairs: [],
+        tagName: 'strong'
+      }
+    },
+    {
+      type: 'text',
+      value: {
+        text: 'Test'
+      }
+    },
+    {
+      type: 'elementClose',
+      value: {
+        tagName: 'strong'
+      }
+    },
+    {
+      type: 'elementClose',
+      value: {
+        tagName: 'div'
+      }
+    },
+    {
+      type: 'elementClose',
+      value: {
+        tagName: 'div'
+      }
+    }
+  ]);
 });
 
 test('parses a partial fragment with nested tags', () => {
   // prettier-ignore
   let result = parseFragment('<div class="foo"><h1>Hello</h1><div class="content">');
   expect(result.type).toBe('fullyParsed');
-  expect(result.value.operations).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "type": "elementOpen",
-        "value": Object {
-          "propertyValuePairs": Array [
-            Array [
-              "class",
-              "foo",
-            ],
-          ],
-          "tagName": "div",
-        },
-      },
-      Object {
-        "type": "elementOpen",
-        "value": Object {
-          "propertyValuePairs": Array [],
-          "tagName": "h1",
-        },
-      },
-      Object {
-        "type": "text",
-        "value": Object {
-          "text": "Hello",
-        },
-      },
-      Object {
-        "type": "elementClose",
-        "value": Object {
-          "tagName": "h1",
-        },
-      },
-      Object {
-        "type": "elementOpen",
-        "value": Object {
-          "propertyValuePairs": Array [
-            Array [
-              "class",
-              "content",
-            ],
-          ],
-          "tagName": "div",
-        },
+  expect(result.value.operations).toEqual([
+    {
+      type: 'elementOpen',
+      value: {
+        propertyValuePairs: [['class', 'foo']],
+        tagName: 'div'
+      }
     },
-    ]
-  `);
+    {
+      type: 'elementOpen',
+      value: {
+        propertyValuePairs: [],
+        tagName: 'h1'
+      }
+    },
+    {
+      type: 'text',
+      value: {
+        text: 'Hello'
+      }
+    },
+    {
+      type: 'elementClose',
+      value: {
+        tagName: 'h1'
+      }
+    },
+    {
+      type: 'elementOpen',
+      value: {
+        propertyValuePairs: [['class', 'content']],
+        tagName: 'div'
+      }
+    }
+  ]);
 });
