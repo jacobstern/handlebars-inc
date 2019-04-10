@@ -1,4 +1,6 @@
 vendor/
 
+# Forked source files
+lib/helpers/each.js
 lib/compiler/javascript-compiler.js
 lib/runtime.js

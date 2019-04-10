@@ -16,8 +16,7 @@
           }
         ]
       },
-      "file": "each.hbs",
-      "test": "skip"
+      "file": "each.hbs"
     },
     {
       "desc": "with an if clause that matches",
