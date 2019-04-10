@@ -1,19 +1,20 @@
 import parse5 from 'parse5';
 import { DOMOperation, PropertyValuePair } from '../dom-operation';
+import { parseClosingTags, ClosingTagsSource } from './closing-tags-parser';
 
-export interface FullyParsedResult {
+export interface ParsedFullTags {
   operations: DOMOperation[];
 }
 
 export type ParseResult = {
-  type: 'fullyParsed';
-  value: FullyParsedResult;
+  type: 'fullTags';
+  value: ParsedFullTags;
 };
 
-function getTrailingJunk(
+function getRemainingText(
   fragment: string,
   ast: parse5.DefaultTreeDocumentFragment
-): string | undefined {
+): string {
   if (ast.childNodes.length) {
     let lastChild = ast.childNodes[ast.childNodes.length - 1];
     let elementLastChild = lastChild as parse5.DefaultTreeElement;
@@ -22,6 +23,7 @@ function getTrailingJunk(
       return fragment.slice(sourceLocation.endOffset);
     }
   }
+  return '';
 }
 
 function getPropertyValuePairs(
@@ -81,17 +83,40 @@ function getFragmentDOMOperations(
   return operations;
 }
 
-export function parseFragment(fragment: string): ParseResult {
-  let ast = parse5.parseFragment(fragment, { sourceCodeLocationInfo: true });
-  let fragmentAst = ast as parse5.DefaultTreeDocumentFragment;
-  let trailingJunk = getTrailingJunk(fragment, fragmentAst);
-  if (trailingJunk) {
-    throw new Error(`Not implemented: trailing junk in source ${trailingJunk}`);
-  }
-  return {
-    type: 'fullyParsed',
-    value: {
-      operations: getFragmentDOMOperations(fragmentAst)
+function getOperationsFromTags(tags: ClosingTagsSource[]): DOMOperation[] {
+  return tags.map(
+    (tag): DOMOperation => {
+      switch (tag.type) {
+        case 'closingTag': {
+          return {
+            type: 'elementClose',
+            value: { tagName: tag.value.tagName }
+          };
+        }
+        case 'closingTagsInterstitialText': {
+          return {
+            type: 'text',
+            value: { text: tag.value.text }
+          };
+        }
+      }
     }
-  };
+  );
+}
+
+export function parseFragment(fragment: string): ParseResult {
+  let operations: DOMOperation[] = [];
+  // There may be unmatched closing tags at either the beginning or very end of
+  // a valid fragment.
+  // For example: '</div><p>...</p></div>'.
+  let initialClosing = parseClosingTags(fragment);
+  operations = operations.concat(getOperationsFromTags(initialClosing.tags));
+  let remaining = initialClosing.remaining;
+  let ast = parse5.parseFragment(remaining, { sourceCodeLocationInfo: true });
+  let fragmentAst = ast as parse5.DefaultTreeDocumentFragment;
+  operations = operations.concat(getFragmentDOMOperations(fragmentAst));
+  remaining = getRemainingText(remaining, fragmentAst);
+  let endingClosing = parseClosingTags(remaining);
+  operations = operations.concat(getOperationsFromTags(endingClosing.tags));
+  return { type: 'fullTags', value: { operations } };
 }

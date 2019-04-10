@@ -15,11 +15,11 @@ export interface ClosingTagsParseResult {
   remaining: string;
 }
 
-const CLOSING_TAG_REGEX = /^<\/([A-Za-z]+)>/;
+const CLOSING_TAG_REGEX = /^<\/([A-Za-z0-9]+)>/;
 
 const INTERSTITIAL_TEXT_REGEX = /^[^<]+/;
 
-export function parse(fragment: string): ClosingTagsParseResult {
+export function parseClosingTags(fragment: string): ClosingTagsParseResult {
   let currentMatch: [ClosingTagsSource, string] | undefined; // [tag, remaining]
   let result = fragment.match(CLOSING_TAG_REGEX);
   if (result) {
@@ -37,7 +37,7 @@ export function parse(fragment: string): ClosingTagsParseResult {
   }
   if (currentMatch) {
     let [tag, remaining] = currentMatch;
-    let rest = parse(remaining);
+    let rest = parseClosingTags(remaining);
     return {
       tags: [tag, ...rest.tags],
       remaining: rest.remaining

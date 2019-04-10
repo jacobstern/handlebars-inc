@@ -2,13 +2,13 @@ import { parseFragment } from '../../lib/core/parser';
 
 test('returns empty for empty string', () => {
   const result = parseFragment('');
-  expect(result.type).toBe('fullyParsed');
+  expect(result.type).toBe('fullTags');
   expect(result.value.operations).toHaveLength(0);
 });
 
 test('parses a text node', () => {
   const result = parseFragment('Hello ');
-  expect(result.type).toBe('fullyParsed');
+  expect(result.type).toBe('fullTags');
   expect(result.value.operations).toHaveLength(1);
   const text = result.value.operations[0];
   expect(text).toEqual({ type: 'text', value: { text: 'Hello ' } });
@@ -16,7 +16,7 @@ test('parses a text node', () => {
 
 test('parses an element with contents and attributes', () => {
   let result = parseFragment('<div class="foo">Test</div>');
-  expect(result.type).toBe('fullyParsed');
+  expect(result.type).toBe('fullTags');
   expect(result.value.operations).toEqual([
     {
       type: 'elementOpen',
@@ -35,7 +35,7 @@ test('parses an element with contents and attributes', () => {
 
 test('parses a fragment with an unclosed tag', () => {
   let result = parseFragment('<div class="foo">Te');
-  expect(result.type).toBe('fullyParsed');
+  expect(result.type).toBe('fullTags');
   expect(result.value.operations).toEqual([
     {
       type: 'elementOpen',
@@ -48,10 +48,37 @@ test('parses a fragment with an unclosed tag', () => {
   ]);
 });
 
+test.only('parses a fragment with unmatched closing tags', () => {
+  let result = parseFragment('</h1><p>Test</p></span>');
+  expect(result.type).toBe('fullTags');
+  expect(result.value.operations).toEqual([
+    {
+      type: 'elementClose',
+      value: { tagName: 'h1' }
+    },
+    {
+      type: 'elementOpen',
+      value: { tagName: 'p', propertyValuePairs: [] }
+    },
+    {
+      type: 'text',
+      value: { text: 'Test' }
+    },
+    {
+      type: 'elementClose',
+      value: { tagName: 'p' }
+    },
+    {
+      type: 'elementClose',
+      value: { tagName: 'span' }
+    }
+  ]);
+});
+
 test('parses a fragment with nested tags', () => {
   // prettier-ignore
   let result = parseFragment('<div class="foo"><h1>Hello</h1><div class="content"><strong>Test</strong></div></div>');
-  expect(result.type).toBe('fullyParsed');
+  expect(result.type).toBe('fullTags');
   expect(result.value.operations).toEqual([
     {
       type: 'elementOpen',
@@ -123,7 +150,7 @@ test('parses a fragment with nested tags', () => {
 test('parses a partial fragment with nested tags', () => {
   // prettier-ignore
   let result = parseFragment('<div class="foo"><h1>Hello</h1><div class="content">');
-  expect(result.type).toBe('fullyParsed');
+  expect(result.type).toBe('fullTags');
   expect(result.value.operations).toEqual([
     {
       type: 'elementOpen',
