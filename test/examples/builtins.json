@@ -17,17 +17,16 @@
         ]
       },
       "file": "each.hbs",
-      "skip": true
+      "test": "skip"
     },
     {
       "desc": "with an if clause that matches",
       "data": {
         "author": true,
-        "firstName": "Test",
-        "lastName": "Person"
+        "firstName": "Sam",
+        "lastName": "Seder"
       },
-      "file": "if.hbs",
-      "skip": true
+      "file": "if.hbs"
     },
     {
       "desc": "with an if clause that does not match",

@@ -51,9 +51,9 @@ export function runIntegrationTests(configs) {
     describe(config.desc, () => {
       config.examples.forEach(example => {
         let testFn = test;
-        if (example.skip) {
+        if (example.test === 'skip') {
           testFn = test.skip;
-        } else if (example.only) {
+        } else if (example.test === 'only') {
           testFn = test.only;
         }
         testFn(example.desc, done => {
@@ -70,8 +70,8 @@ export function runIntegrationTests(configs) {
             let idomPrecompiled = HandlebarsIDOM.precompile(hbsContent, {
               idom: true
             });
-            // console.log(HandlebarsIDOM.precompile(hbsContent));
-            // console.log(idomPrecompiled);
+            // console.log('Handlebars: ', HandlebarsIDOM.precompile(hbsContent));
+            // console.log('IDOM', idomPrecompiled);
             let dom = runInTestDOM(`
               var mainDiv = document.getElementById('main');
               var template = HandlebarsIDOM.template(${idomPrecompiled});
