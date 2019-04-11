@@ -3,7 +3,7 @@
 
 module.exports = {
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)$',
-  moduleFileExtensions: ['ts', 'js', 'json'],
+  moduleFileExtensions: ['ts', 'js'],
 
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
@@ -20,7 +20,5 @@ module.exports = {
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: ['/node_modules/', 'vendor/'],
 
-  globalSetup: './test/setup.js',
-
-  globalTeardown: './test/teardown.js'
+  watchPlugins: ['./test/jsonnet-watch-plugin']
 };
