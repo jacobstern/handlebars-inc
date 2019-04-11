@@ -9,7 +9,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|ts)$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
         options: {
@@ -17,5 +17,8 @@ module.exports = {
         }
       }
     ]
+  },
+  resolve: {
+    extensions: ['.ts', '.js']
   }
 };

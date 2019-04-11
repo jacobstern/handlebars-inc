@@ -60,25 +60,23 @@ export function runIntegrationTests(configs) {
             if (expected == null) {
               expected = getExpectedFromHandlebars(hbsContent, example.data);
             }
-            let normalizedExpected = normalizeHTML(expected);
-            let bundledHandlebarsTemplate = HandlebarsIDOM.compile(hbsContent);
-            let bundledHandlebarsText = bundledHandlebarsTemplate(example.data);
-            let normalizedBundled = normalizeHTML(bundledHandlebarsText);
-            expect(normalizedBundled).toBe(normalizedExpected);
-            let idomPrecompiled = HandlebarsIDOM.precompile(hbsContent, {
-              idom: true
-            });
-            // console.log('Handlebars: ', HandlebarsIDOM.precompile(hbsContent));
+            expected = normalizeHTML(expected);
+            let template = HandlebarsIDOM.compile(hbsContent);
+            let text = template(example.data);
+            let normalizedText = normalizeHTML(text);
+            expect(normalizedText).toBe(expected);
+            let idomPrecompiled = HandlebarsIDOM.precompile(hbsContent);
+            // console.log('Handlebars: ', Handlebars.precompile(hbsContent));
             // console.log('IDOM', idomPrecompiled);
             let dom = runInTestDOM(`
               var mainDiv = document.getElementById('main');
-              var template = HandlebarsIDOM.template(${idomPrecompiled});
+              var template = HandlebarsIDOM.templateIDOM(${idomPrecompiled});
               var thunk = template(${JSON.stringify(example.data)});
               HandlebarsIDOM.IncrementalDOM.patch(mainDiv, thunk);
             `);
             let mainDiv = dom.window.document.getElementById('main');
             let normalizedIDOM = normalizeHTML(mainDiv.innerHTML);
-            expect(normalizedIDOM).toEqual(normalizedExpected);
+            expect(normalizedIDOM).toEqual(expected);
             done();
           });
         });

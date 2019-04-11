@@ -55,7 +55,8 @@
       "data": {
         "license": null
       },
-      "file": "unless.hbs"
+      "file": "unless.hbs",
+      "test": "only"
     },
     {
       "desc": "with an unless block helper that doesn't match",

@@ -15,7 +15,8 @@ test('can render a basic HTML fragment', () => {
     idom.text('Some content');
     idom.elementClose('div');
   });
-  let expected =
-    '<div class="content" id="root"><h1>Hello World</h1>Some content</div>';
-  expect(normalizeHTML(result)).toBe(normalizeHTML(expected));
+  let expected = normalizeHTML(
+    '<div class="content" id="root"><h1>Hello World</h1>Some content</div>'
+  );
+  expect(normalizeHTML(result)).toBe(expected);
 });
