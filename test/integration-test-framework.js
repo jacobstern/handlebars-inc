@@ -50,41 +50,34 @@ export function runIntegrationTests(configs) {
         } else if (example.test === 'only') {
           testFn = test.only;
         }
-        testFn(example.desc, done => {
-          let filePath = path.join(__dirname, 'examples', 'hbs', example.file);
-          fs.readFile(filePath, { encoding: 'utf8' }, (err, hbsContent) => {
-            if (err) {
-              throw err;
-            }
-            let expected = example.expected;
-            if (expected == null) {
-              expected = getExpectedFromHandlebars(hbsContent, example.data);
-            }
-            expected = normalizeHTML(expected);
-            if (example.printExpected) {
-              // eslint-disable-next-line no-console
-              console.debug(`let expected = \`${expected}\`;`);
-            }
-            let template = HandlebarsIDOM.compile(hbsContent);
-            let text = template(example.data);
-            let normalizedText = normalizeHTML(text);
-            expect(normalizedText).toBe(expected);
-            let idomPrecompiled = HandlebarsIDOM.precompile(hbsContent);
-            // console.log(expected);
-            // console.log('Handlebars: ', Handlebars.precompile(hbsContent));
-            // console.log('IDOM', idomPrecompiled);
-            let scriptData = JSON.stringify(example.data);
-            let dom = runInTestDOM(`
+        testFn(example.desc, () => {
+          let { template: hbsContent, expected } = example;
+          if (expected == null) {
+            expected = getExpectedFromHandlebars(hbsContent, example.data);
+          }
+          expected = normalizeHTML(expected);
+          if (example.printExpected) {
+            // eslint-disable-next-line no-console
+            console.debug(`let expected = \`${expected}\`;`);
+          }
+          let template = HandlebarsIDOM.compile(hbsContent);
+          let text = template(example.data);
+          let normalizedText = normalizeHTML(text);
+          expect(normalizedText).toBe(expected);
+          let idomPrecompiled = HandlebarsIDOM.precompile(hbsContent);
+          // console.log(expected);
+          // console.log('Handlebars: ', Handlebars.precompile(hbsContent));
+          // console.log('IDOM', idomPrecompiled);
+          let scriptData = JSON.stringify(example.data);
+          let dom = runInTestDOM(`
               var mainDiv = document.getElementById('main');
               var template = HandlebarsIDOM.template(${idomPrecompiled});
               var thunk = template(${scriptData}, { backend: 'idom' });
               HandlebarsIDOM.patch(mainDiv, thunk);
             `);
-            let mainDiv = dom.window.document.getElementById('main');
-            let normalizedIDOM = normalizeHTML(mainDiv.innerHTML);
-            expect(normalizedIDOM).toBe(expected);
-            done();
-          });
+          let mainDiv = dom.window.document.getElementById('main');
+          let normalizedIDOM = normalizeHTML(mainDiv.innerHTML);
+          expect(normalizedIDOM).toBe(expected);
         });
       });
     });

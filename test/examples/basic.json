@@ -3,8 +3,8 @@
    "examples": [
       {
          "desc": "multiple attributes on an <input> tag",
-         "expected": "<input type=\"text\" placeholder=\"Name\">",
-         "file": "input-attrs.hbs"
+         "expected": "<input type=\"text\" placeholder=\"Name\"></input>\n",
+         "template": "<input type=\"text\" placeholder=\"Name\"></input>\n"
       }
    ]
 }

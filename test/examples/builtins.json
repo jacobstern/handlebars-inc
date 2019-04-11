@@ -16,7 +16,7 @@
             "title": "Hello world!"
          },
          "desc": "with a basic usage of each",
-         "file": "each.hbs"
+         "template": "{{title}}\n{{#each comments}}\n<h1>{{subject}}</h1>\n<div>\n  {{body}}\n</div>\n{{/each}}"
       },
       {
          "data": {
@@ -25,14 +25,14 @@
             "lastName": "Seder"
          },
          "desc": "with an if block helper that matches",
-         "file": "if.hbs"
+         "template": "<div class=\"entry\">\n  {{#if author}}\n  <h1>{{firstName}} {{lastName}}</h1>\n  {{/if}}\n</div>"
       },
       {
          "data": {
             "author": false
          },
          "desc": "with an if block helper that does not match",
-         "file": "if.hbs"
+         "template": "<div class=\"entry\">\n  {{#if author}}\n  <h1>{{firstName}} {{lastName}}</h1>\n  {{/if}}\n</div>"
       },
       {
          "data": {
@@ -41,21 +41,21 @@
             "lastName": "Seder"
          },
          "desc": "with an if/else block helper that matches",
-         "file": "if-else.hbs"
+         "template": "<div class=\"entry\">\n  {{#if author}}\n  <h1>{{firstName}} {{lastName}}</h1>\n  {{else}}\n  <h1>Unknown Author</h1>\n  {{/if}}\n</div>"
       },
       {
          "data": {
             "author": false
          },
          "desc": "with an if/else block helper that does not match",
-         "file": "if-else.hbs"
+         "template": "<div class=\"entry\">\n  {{#if author}}\n  <h1>{{firstName}} {{lastName}}</h1>\n  {{else}}\n  <h1>Unknown Author</h1>\n  {{/if}}\n</div>"
       },
       {
          "data": {
             "license": null
          },
          "desc": "with an unless block helper that matches",
-         "file": "unless.hbs"
+         "template": "<div class=\"entry\">\n  {{#unless license}}\n  <h3 class=\"warning\">WARNING: This entry does not have a license!</h3>\n  {{/unless}}\n</div>\n"
       },
       {
          "data": {
@@ -63,7 +63,7 @@
          },
          "desc": "with an unless block helper that doesn't match",
          "expected": "<div class='entry'>\n</div>\n",
-         "file": "unless.hbs"
+         "template": "<div class=\"entry\">\n  {{#unless license}}\n  <h3 class=\"warning\">WARNING: This entry does not have a license!</h3>\n  {{/unless}}\n</div>\n"
       },
       {
          "data": {
@@ -72,7 +72,7 @@
          },
          "desc": "with an each block helper that doesn't match",
          "expected": "Hello world!\n<div>No comments.</div>\n",
-         "file": "each-else.hbs"
+         "template": "{{title}}\n{{#each comments}}\n<h1>{{subject}}</h1>\n<div>\n  {{body}}\n</div>\n{{else}}\n<div>No comments.</div>\n{{/each}}"
       },
       {
          "data": {
@@ -83,7 +83,7 @@
             ]
          },
          "desc": "with an each block helper that uses this",
-         "file": "each-this.hbs"
+         "template": "<ul class=\"people-list\">\n  {{#each people}}\n  <li>{{this}}</li>\n  {{/each}}\n</ul>"
       },
       {
          "data": {
@@ -94,7 +94,7 @@
             ]
          },
          "desc": "with an each block helper that uses @index",
-         "file": "each-index.hbs"
+         "template": "<ul class=\"people-list\">\n  {{#each people}}\n  <li>{{this}}</li>\n  {{/each}}\n</ul>"
       },
       {
          "data": {
@@ -105,7 +105,7 @@
             "title": "My first post!"
          },
          "desc": "with a with block helper",
-         "file": "with.hbs"
+         "template": "<div class=\"entry\">\n  <h1>{{title}}</h1>\n\n  {{#with author}}\n  <h2>By {{firstName}} {{lastName}}</h2>\n  {{/with}}\n</div>"
       }
    ]
 }

@@ -6,14 +6,14 @@
             "name": "Jake"
          },
          "desc": "in plain text",
-         "file": "hello.hbs"
+         "template": "Hello {{ name }}!"
       },
       {
          "data": {
             "title": "A Title"
          },
          "desc": "inside an element tag",
-         "file": "element-content.hbs"
+         "template": "<h1>{{title}}</h1>"
       },
       {
          "data": {
@@ -22,7 +22,7 @@
             "lastName": "Stern"
          },
          "desc": "with nested tags",
-         "file": "nested-tags.hbs"
+         "template": "<div class=\"entry\">\n  <div>\n    <h1>{{firstName}} {{lastName}}</h1>\n  </div>\n  <div>{{content}}</div>\n</div>"
       }
    ]
 }

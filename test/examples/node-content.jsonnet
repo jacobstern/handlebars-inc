@@ -6,14 +6,14 @@
       data: {
         name: 'Jake'
       },
-      file: 'hello.hbs'
+      template: importstr './hbs/hello.hbs'
     },
     {
       desc: 'inside an element tag',
       data: {
         title: 'A Title'
       },
-      file: 'element-content.hbs'
+      template: importstr './hbs/element-content.hbs'
     },
     {
       desc: 'with nested tags',
@@ -22,7 +22,7 @@
         lastName: 'Stern',
         content: 'Hello world!'
       },
-      file: 'nested-tags.hbs'
+      template: importstr './hbs/nested-tags.hbs'
     }
   ]
 }

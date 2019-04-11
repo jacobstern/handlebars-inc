@@ -16,7 +16,7 @@
           }
         ]
       },
-      file: 'each.hbs'
+      template: importstr './hbs/each.hbs'
     },
     {
       desc: 'with an if block helper that matches',
@@ -25,14 +25,14 @@
         firstName: 'Sam',
         lastName: 'Seder'
       },
-      file: 'if.hbs'
+      template: importstr './hbs/if.hbs'
     },
     {
       desc: 'with an if block helper that does not match',
       data: {
         author: false
       },
-      file: 'if.hbs'
+      template: importstr './hbs/if.hbs'
     },
     {
       desc: 'with an if/else block helper that matches',
@@ -41,28 +41,28 @@
         firstName: 'Sam',
         lastName: 'Seder'
       },
-      file: 'if-else.hbs'
+      template: importstr './hbs/if-else.hbs'
     },
     {
       desc: 'with an if/else block helper that does not match',
       data: {
         author: false
       },
-      file: 'if-else.hbs'
+      template: importstr './hbs/if-else.hbs'
     },
     {
       desc: 'with an unless block helper that matches',
       data: {
         license: null
       },
-      file: 'unless.hbs'
+      template: importstr './hbs/unless.hbs'
     },
     {
       desc: "with an unless block helper that doesn't match",
       data: {
         license: 'MIT'
       },
-      file: 'unless.hbs',
+      template: importstr './hbs/unless.hbs',
       expected: |||
         <div class='entry'>
         </div>
@@ -74,7 +74,7 @@
         title: 'Hello world!',
         comments: []
       },
-      file: 'each-else.hbs',
+      template: importstr './hbs/each-else.hbs',
       expected: |||
         Hello world!
         <div>No comments.</div>
@@ -83,12 +83,12 @@
     {
       desc: 'with an each block helper that uses this',
       data: { people: ['Yehuda Katz', 'Alan Johnson', 'Charles Jolley'] },
-      file: 'each-this.hbs'
+      template: importstr './hbs/each-this.hbs'
     },
     {
       desc: 'with an each block helper that uses @index',
       data: { 'people': ['Yehuda Katz', 'Alan Johnson', 'Charles Jolley'] },
-      file: 'each-index.hbs'
+      template: importstr './hbs/each-index.hbs'
     },
     {
       desc: 'with a with block helper',
@@ -99,7 +99,7 @@
           lastName: 'Jolley'
         }
       },
-      file: 'with.hbs'
+      template: importstr './hbs/with.hbs'
     }
   ]
 }

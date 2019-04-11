@@ -3,8 +3,10 @@
   examples: [
     {
       desc: 'multiple attributes on an <input> tag',
-      file: 'input-attrs.hbs',
-      expected: '<input type=\"text\" placeholder=\"Name\">'
+      template: importstr './hbs/input-attrs.hbs',
+      expected: |||
+        <input type="text" placeholder="Name"></input>
+      |||,
     }
   ]
 }
