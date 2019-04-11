@@ -71,7 +71,7 @@ export function runIntegrationTests(configs) {
               var mainDiv = document.getElementById('main');
               var template = HandlebarsIDOM.template(${idomPrecompiled});
               var thunk = template(${JSON.stringify(example.data)});
-              IncrementalDOM.patch(mainDiv, thunk);
+              HandlebarsIDOM.IncrementalDOM.patch(mainDiv, thunk);
             `);
             let mainDiv = dom.window.document.getElementById('main');
             expect(mainDiv.innerHTML).toEqual(expected);
