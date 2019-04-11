@@ -61,11 +61,16 @@ export function runIntegrationTests(configs) {
               expected = getExpectedFromHandlebars(hbsContent, example.data);
             }
             expected = normalizeHTML(expected);
+            if (example.printExpected) {
+              // eslint-disable-next-line no-console
+              console.debug(`let expected = \`${expected}\`;`);
+            }
             let template = HandlebarsIDOM.compile(hbsContent);
             let text = template(example.data);
             let normalizedText = normalizeHTML(text);
             expect(normalizedText).toBe(expected);
             let idomPrecompiled = HandlebarsIDOM.precompile(hbsContent);
+            // console.log(expected);
             // console.log('Handlebars: ', Handlebars.precompile(hbsContent));
             // console.log('IDOM', idomPrecompiled);
             let dom = runInTestDOM(`

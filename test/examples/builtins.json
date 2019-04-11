@@ -73,6 +73,27 @@
       },
       "file": "each-else.hbs",
       "expected": "Hello world!\n<div>No comments.</div>\n"
+    },
+    {
+      "desc": "with an each block helper that uses this",
+      "data": { "people": ["Yehuda Katz", "Alan Johnson", "Charles Jolley"] },
+      "file": "each-this.hbs"
+    },
+    {
+      "desc": "with an each block helper that uses @index",
+      "data": { "people": ["Yehuda Katz", "Alan Johnson", "Charles Jolley"] },
+      "file": "each-index.hbs"
+    },
+    {
+      "desc": "with a with block helper",
+      "data": {
+        "title": "My first post!",
+        "author": {
+          "firstName": "Charles",
+          "lastName": "Jolley"
+        }
+      },
+      "file": "with.hbs"
     }
   ]
 }
