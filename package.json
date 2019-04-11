@@ -12,6 +12,7 @@
     "runtime:dev": "webpack --mode=development",
     "pretest": "npm run runtime:dev",
     "test": "jest",
+    "pretest:watch": "npm run runtime:dev",
     "test:watch": "jest --watch",
     "test:skipped": "jest --reporters jest-skipped-reporter"
   },

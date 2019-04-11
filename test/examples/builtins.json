@@ -55,8 +55,7 @@
       "data": {
         "license": null
       },
-      "file": "unless.hbs",
-      "test": "only"
+      "file": "unless.hbs"
     },
     {
       "desc": "with an unless block helper that doesn't match",
@@ -65,6 +64,15 @@
       },
       "file": "unless.hbs",
       "expected": "<div class=\"entry\">\n</div>"
+    },
+    {
+      "desc": "with an each block helper that doesn't match",
+      "data": {
+        "title": "Hello world!",
+        "comments": []
+      },
+      "file": "each-else.hbs",
+      "expected": "Hello world!\n<div>No comments.</div>\n"
     }
   ]
 }
