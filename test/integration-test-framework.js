@@ -2,19 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { Script } from 'vm';
 import Handlebars from 'handlebars';
-import parse5 from 'parse5';
 import HandlebarsIDOM from '../lib';
 import { JSDOM } from 'jsdom';
-
-/**
- * Un-problematizes string comparison of HTML fragments, especially for
- * self-closing tags which can be ambiguous.
- *
- * For example, `normalizeHTML('<input>') === normalizeHTML('<input></input>')`.
- */
-export function normalizeHTML(fragment) {
-  return parse5.serialize(parse5.parseFragment(fragment));
-}
+import { normalizeHTML } from './test-helpers';
 
 function createRuntimeScript() {
   let idomBuildPath = path.join(__dirname, '../dist/runtime.js');
