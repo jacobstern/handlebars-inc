@@ -10,11 +10,14 @@
     "prepublishOnly": "npm run build",
     "lint": "eslint .",
     "runtime:dev": "webpack --mode=development",
-    "jsonnet": "node ./scripts/build-test-jsonnet.js",
+    "jsonnet": "run-s jsonnet:clean jsonnet:build",
+    "jsonnet:build": "node ./scripts/build-test-jsonnet.js",
     "jsonnet:clean": "node ./scripts/clean-test-jsonnet.js",
+    "pretest": "run-p jsonnet runtime:dev",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "test:skipped": "jest --reporters jest-skipped-reporter"
+    "test:watch": "npm run test -- --watch",
+    "test:skipped": "npm run test -- --reporters jest-skipped-reporter",
+    "test:now": "jest"
   },
   "author": "Jacob Stern",
   "license": "MIT",
