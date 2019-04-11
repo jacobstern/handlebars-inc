@@ -4,3 +4,5 @@ dist/
 
 # Local development
 npm-debug.log
+
+test/examples/*.json
