@@ -1,4 +1,9 @@
 import chokidar from 'chokidar';
+import util from 'util';
+let { exec } = require('child_process');
+
+let execAsync = util.promisify(exec);
+
 import {
   buildTestJsonnet,
   cleanTestJsonnet,
@@ -8,10 +13,17 @@ import {
   allJsonnetFiles
 } from '../scripts/support/test-jsonnet';
 
-export default async function() {
+async function initTestJsonnet() {
   await cleanTestJsonnet();
   await buildTestJsonnet();
+}
 
+async function buildWebpack() {
+  await execAsync('webpack --mode=development');
+}
+
+export default async function() {
+  await Promise.all([buildWebpack(), initTestJsonnet()]);
   let jsonnetFiles = await allJsonnetFiles();
   let watcher = chokidar.watch(jsonnetFiles);
   watcher.on('change', file => {

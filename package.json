@@ -10,11 +10,9 @@
     "prepublishOnly": "npm run build",
     "lint": "eslint .",
     "runtime:dev": "webpack --mode=development",
-    "pretest": "npm run runtime:dev",
     "jsonnet": "node ./scripts/build-test-jsonnet.js",
     "jsonnet:clean": "node ./scripts/clean-test-jsonnet.js",
     "test": "jest",
-    "pretest:watch": "npm run runtime:dev",
     "test:watch": "jest --watch",
     "test:skipped": "jest --reporters jest-skipped-reporter"
   },
