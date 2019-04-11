@@ -72,7 +72,7 @@ export function runIntegrationTests(configs) {
               var mainDiv = document.getElementById('main');
               var template = HandlebarsIDOM.templateIDOM(${idomPrecompiled});
               var thunk = template(${JSON.stringify(example.data)});
-              HandlebarsIDOM.IncrementalDOM.patch(mainDiv, thunk);
+              HandlebarsIDOM.patch(mainDiv, thunk);
             `);
             let mainDiv = dom.window.document.getElementById('main');
             let normalizedIDOM = normalizeHTML(mainDiv.innerHTML);
