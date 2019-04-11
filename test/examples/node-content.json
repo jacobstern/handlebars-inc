@@ -1,0 +1,28 @@
+{
+   "desc": "the compiler can insert dynamic content",
+   "examples": [
+      {
+         "data": {
+            "name": "Jake"
+         },
+         "desc": "in plain text",
+         "file": "hello.hbs"
+      },
+      {
+         "data": {
+            "title": "A Title"
+         },
+         "desc": "inside an element tag",
+         "file": "element-content.hbs"
+      },
+      {
+         "data": {
+            "content": "Hello world!",
+            "firstName": "Jake",
+            "lastName": "Stern"
+         },
+         "desc": "with nested tags",
+         "file": "nested-tags.hbs"
+      }
+   ]
+}

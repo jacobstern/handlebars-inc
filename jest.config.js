@@ -18,5 +18,9 @@ module.exports = {
   testEnvironment: 'node',
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  testPathIgnorePatterns: ['/node_modules/', 'vendor/']
+  testPathIgnorePatterns: ['/node_modules/', 'vendor/'],
+
+  globalSetup: './test/setup.js',
+
+  globalTeardown: './test/teardown.js'
 };

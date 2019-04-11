@@ -1,0 +1,10 @@
+{
+   "desc": "the compiler can generate common HTML constructs, such as",
+   "examples": [
+      {
+         "desc": "multiple attributes on an <input> tag",
+         "expected": "<input type=\"text\" placeholder=\"Name\">",
+         "file": "input-attrs.hbs"
+      }
+   ]
+}

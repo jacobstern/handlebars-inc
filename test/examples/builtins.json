@@ -1,0 +1,111 @@
+{
+   "desc": "the compiler implements built-in helpers properly",
+   "examples": [
+      {
+         "data": {
+            "comments": [
+               {
+                  "body": "This is a good post.",
+                  "subject": "Nice job"
+               },
+               {
+                  "body": "",
+                  "subject": "Minor correction"
+               }
+            ],
+            "title": "Hello world!"
+         },
+         "desc": "with a basic usage of each",
+         "file": "each.hbs"
+      },
+      {
+         "data": {
+            "author": true,
+            "firstName": "Sam",
+            "lastName": "Seder"
+         },
+         "desc": "with an if block helper that matches",
+         "file": "if.hbs"
+      },
+      {
+         "data": {
+            "author": false
+         },
+         "desc": "with an if block helper that does not match",
+         "file": "if.hbs"
+      },
+      {
+         "data": {
+            "author": true,
+            "firstName": "Sam",
+            "lastName": "Seder"
+         },
+         "desc": "with an if/else block helper that matches",
+         "file": "if-else.hbs"
+      },
+      {
+         "data": {
+            "author": false
+         },
+         "desc": "with an if/else block helper that does not match",
+         "file": "if-else.hbs"
+      },
+      {
+         "data": {
+            "license": null
+         },
+         "desc": "with an unless block helper that matches",
+         "file": "unless.hbs"
+      },
+      {
+         "data": {
+            "license": "MIT"
+         },
+         "desc": "with an unless block helper that doesn't match",
+         "expected": "<div class=\"entry\">\n</div>",
+         "file": "unless.hbs"
+      },
+      {
+         "data": {
+            "comments": [ ],
+            "title": "Hello world!"
+         },
+         "desc": "with an each block helper that doesn't match",
+         "expected": "Hello world!\n<div>No comments.</div>\n",
+         "file": "each-else.hbs"
+      },
+      {
+         "data": {
+            "people": [
+               "Yehuda Katz",
+               "Alan Johnson",
+               "Charles Jolley"
+            ]
+         },
+         "desc": "with an each block helper that uses this",
+         "file": "each-this.hbs"
+      },
+      {
+         "data": {
+            "people": [
+               "Yehuda Katz",
+               "Alan Johnson",
+               "Charles Jolley"
+            ]
+         },
+         "desc": "with an each block helper that uses @index",
+         "file": "each-index.hbs"
+      },
+      {
+         "data": {
+            "author": {
+               "firstName": "Charles",
+               "lastName": "Jolley"
+            },
+            "title": "My first post!"
+         },
+         "desc": "with a with block helper",
+         "file": "with.hbs"
+      }
+   ]
+}
