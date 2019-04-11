@@ -17,7 +17,8 @@
     "test": "jest",
     "test:watch": "npm run test -- --watch",
     "test:skipped": "npm run test -- --reporters jest-skipped-reporter",
-    "test:now": "jest"
+    "test:now": "jest",
+    "pretify": "prettier --write **/*.js **/*.ts"
   },
   "author": "Jacob Stern",
   "license": "MIT",
