@@ -82,7 +82,7 @@ export function runIntegrationTests(configs) {
             `);
             let mainDiv = dom.window.document.getElementById('main');
             let normalizedIDOM = normalizeHTML(mainDiv.innerHTML);
-            expect(normalizedIDOM).toEqual(expected);
+            expect(normalizedIDOM).toBe(expected);
             done();
           });
         });

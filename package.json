@@ -13,7 +13,7 @@
     "jsonnet": "run-s jsonnet:clean jsonnet:build",
     "jsonnet:build": "node ./scripts/build-test-jsonnet.js",
     "jsonnet:clean": "node ./scripts/clean-test-jsonnet.js",
-    "pretest": "run-p jsonnet runtime:dev",
+    "pretest": "run-p --silent jsonnet runtime:dev",
     "test": "jest",
     "test:watch": "npm run test -- --watch",
     "test:skipped": "npm run test -- --reporters jest-skipped-reporter",
