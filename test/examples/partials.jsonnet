@@ -14,5 +14,25 @@
         Here's a partial: Hello Jake!
       |||,
     },
+    {
+      desc: 'with nested templates',
+      data: {
+        comments: [
+          {
+            subject: 'Nice job',
+            body: 'This is a good post.',
+          },
+          {
+            subject: 'Minor correction',
+            body: '',
+          },
+        ],
+      },
+      partials: {
+        comment: importstr './hbs/comment.hbs',
+        commentsList: importstr './hbs/comments-list.hbs',
+      },
+      template: importstr './hbs/comments-section.hbs',
+    },
   ],
 }

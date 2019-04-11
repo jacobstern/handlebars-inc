@@ -35,9 +35,20 @@ function runInTestDOM(...sources) {
   return dom;
 }
 
-function getExpectedFromHandlebars(hbsContent, data) {
+function getExpectedFromHandlebars(hbsContent, data, partials = {}) {
+  if (partials != null) {
+    for (let key in partials) {
+      Handlebars.registerPartial(key, partials[key]);
+    }
+  }
   let handlebarsTemplate = Handlebars.compile(hbsContent);
-  return handlebarsTemplate(data);
+  let template = handlebarsTemplate(data);
+  if (partials != null) {
+    for (let key in partials) {
+      Handlebars.unregisterPartial(key);
+    }
+  }
+  return template;
 }
 
 export function runIntegrationTests(configs) {
@@ -53,7 +64,7 @@ export function runIntegrationTests(configs) {
         testFn(example.desc, () => {
           let { template: hbs, expected, partials } = example;
           if (expected == null) {
-            expected = getExpectedFromHandlebars(hbs, example.data);
+            expected = getExpectedFromHandlebars(hbs, example.data, partials);
           }
           expected = normalizeHTML(expected);
           if (example.printExpected) {
@@ -76,7 +87,7 @@ export function runIntegrationTests(configs) {
           if (partials != null) {
             for (let key in partials) {
               let precompiled = HandlebarsIDOM.precompile(partials[key]);
-              scriptPartials += `${key}: HandlebarsIDOM.template(${precompiled})`;
+              scriptPartials += `${key}: HandlebarsIDOM.template(${precompiled}),\n`;
             }
           }
           scriptPartials += '\n}';

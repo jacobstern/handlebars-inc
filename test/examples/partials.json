@@ -11,6 +11,26 @@
             "hello": "Hello {{ name }}!"
          },
          "template": "Here's a partial: {{> hello }}\n"
+      },
+      {
+         "data": {
+            "comments": [
+               {
+                  "body": "This is a good post.",
+                  "subject": "Nice job"
+               },
+               {
+                  "body": "",
+                  "subject": "Minor correction"
+               }
+            ]
+         },
+         "desc": "with nested templates",
+         "partials": {
+            "comment": "<h1>{{subject}}</h1>\n<div>\n  {{body}}\n</div>\n",
+            "commentsList": "{{#each comments}}\n{{> comment }}\n{{else}}\n<div>No comments.</div>\n{{/each}}"
+         },
+         "template": "<section>\n{{> commentsList }}\n</section>"
       }
    ]
 }
