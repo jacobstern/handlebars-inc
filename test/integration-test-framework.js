@@ -73,10 +73,11 @@ export function runIntegrationTests(configs) {
             // console.log(expected);
             // console.log('Handlebars: ', Handlebars.precompile(hbsContent));
             // console.log('IDOM', idomPrecompiled);
+            let scriptData = JSON.stringify(example.data);
             let dom = runInTestDOM(`
               var mainDiv = document.getElementById('main');
-              var template = HandlebarsIDOM.templateIDOM(${idomPrecompiled});
-              var thunk = template(${JSON.stringify(example.data)});
+              var template = HandlebarsIDOM.template(${idomPrecompiled});
+              var thunk = template(${scriptData}, { backend: 'idom' });
               HandlebarsIDOM.patch(mainDiv, thunk);
             `);
             let mainDiv = dom.window.document.getElementById('main');
