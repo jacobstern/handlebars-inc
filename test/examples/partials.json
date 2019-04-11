@@ -1,0 +1,16 @@
+{
+   "desc": "the compiler can insert dynamic content",
+   "examples": [
+      {
+         "data": {
+            "name": "Jake"
+         },
+         "desc": "In a simple text template",
+         "expected": "Here's a partial: Hello Jake!\n",
+         "partials": {
+            "hello": "Hello {{ name }}!"
+         },
+         "template": "Here's a partial: {{> hello }}\n"
+      }
+   ]
+}

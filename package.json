@@ -13,7 +13,7 @@
     "jsonnet": "run-s jsonnet:clean jsonnet:build",
     "jsonnet:build": "node ./scripts/build-test-jsonnet.js",
     "jsonnet:clean": "node ./scripts/clean-test-jsonnet.js",
-    "jsonnet:format": "jsonnet fmt -i test/examples/*.jsonnet",
+    "jsonnet:format": "jsonnet fmt -i --indent 2 --max-blank-lines 2 --sort-imports --string-style s --comment-style s test/examples/*.jsonnet",
     "pretest": "run-p --silent jsonnet runtime:dev",
     "test": "jest",
     "test:watch": "npm run test -- --watch",

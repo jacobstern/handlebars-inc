@@ -3,8 +3,8 @@ let { buildTestJsonnet } = require('../scripts/support/test-jsonnet');
 module.exports = class JsonnetWatchPlugin {
   getUsageInfo(/* globalConfig */) {
     return {
-      key: 'j',
-      prompt: 'rebuild jsonnet sources'
+      key: 's',
+      prompt: 'rebuild jsonnet sources',
     };
   }
 

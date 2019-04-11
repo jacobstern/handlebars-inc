@@ -51,25 +51,38 @@ export function runIntegrationTests(configs) {
           testFn = test.only;
         }
         testFn(example.desc, () => {
-          let { template: hbsContent, expected } = example;
+          let { template: hbs, expected, partials } = example;
           if (expected == null) {
-            expected = getExpectedFromHandlebars(hbsContent, example.data);
+            expected = getExpectedFromHandlebars(hbs, example.data);
           }
           expected = normalizeHTML(expected);
           if (example.printExpected) {
             // eslint-disable-next-line no-console
             console.debug(`let expected = \`${expected}\`;`);
           }
-          let template = HandlebarsIDOM.compile(hbsContent);
+          if (partials != null) {
+            for (let key in partials) {
+              HandlebarsIDOM.registerPartial(key, partials[key]);
+            }
+          }
+          // console.log('Handlebars: ', Handlebars.precompile(hbs));
+          // console.log('IDOM', HandlebarsIDOM.precompile(hbs));
+          let template = HandlebarsIDOM.compile(hbs);
           let text = template(example.data);
           let normalizedText = normalizeHTML(text);
           expect(normalizedText).toBe(expected);
-          let idomPrecompiled = HandlebarsIDOM.precompile(hbsContent);
-          // console.log(expected);
-          // console.log('Handlebars: ', Handlebars.precompile(hbsContent));
-          // console.log('IDOM', idomPrecompiled);
+          let idomPrecompiled = HandlebarsIDOM.precompile(hbs);
+          let scriptPartials = '{\n';
+          if (partials != null) {
+            for (let key in partials) {
+              let precompiled = HandlebarsIDOM.precompile(partials[key]);
+              scriptPartials += `${key}: HandlebarsIDOM.template(${precompiled})`;
+            }
+          }
+          scriptPartials += '\n}';
           let scriptData = JSON.stringify(example.data);
           let dom = runInTestDOM(`
+              HandlebarsIDOM.partials = ${scriptPartials};
               var mainDiv = document.getElementById('main');
               var template = HandlebarsIDOM.template(${idomPrecompiled});
               var thunk = template(${scriptData}, { backend: 'idom' });
@@ -78,6 +91,9 @@ export function runIntegrationTests(configs) {
           let mainDiv = dom.window.document.getElementById('main');
           let normalizedIDOM = normalizeHTML(mainDiv.innerHTML);
           expect(normalizedIDOM).toBe(expected);
+          for (let key in partials) {
+            HandlebarsIDOM.unregisterPartial(key);
+          }
         });
       });
     });
