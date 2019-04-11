@@ -7,6 +7,6 @@
       expected: |||
         <input type="text" placeholder="Name"></input>
       |||,
-    }
-  ]
+    },
+  ],
 }

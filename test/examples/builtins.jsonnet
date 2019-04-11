@@ -8,87 +8,87 @@
         comments: [
           {
             subject: 'Nice job',
-            body: 'This is a good post.'
+            body: 'This is a good post.',
           },
           {
             subject: 'Minor correction',
-            body: ''
-          }
-        ]
+            body: '',
+          },
+        ],
       },
-      template: importstr './hbs/each.hbs'
+      template: importstr './hbs/each.hbs',
     },
     {
       desc: 'with an if block helper that matches',
       data: {
         author: true,
         firstName: 'Sam',
-        lastName: 'Seder'
+        lastName: 'Seder',
       },
-      template: importstr './hbs/if.hbs'
+      template: importstr './hbs/if.hbs',
     },
     {
       desc: 'with an if block helper that does not match',
       data: {
-        author: false
+        author: false,
       },
-      template: importstr './hbs/if.hbs'
+      template: importstr './hbs/if.hbs',
     },
     {
       desc: 'with an if/else block helper that matches',
       data: {
         author: true,
         firstName: 'Sam',
-        lastName: 'Seder'
+        lastName: 'Seder',
       },
-      template: importstr './hbs/if-else.hbs'
+      template: importstr './hbs/if-else.hbs',
     },
     {
       desc: 'with an if/else block helper that does not match',
       data: {
-        author: false
+        author: false,
       },
-      template: importstr './hbs/if-else.hbs'
+      template: importstr './hbs/if-else.hbs',
     },
     {
       desc: 'with an unless block helper that matches',
       data: {
-        license: null
+        license: null,
       },
-      template: importstr './hbs/unless.hbs'
+      template: importstr './hbs/unless.hbs',
     },
     {
       desc: "with an unless block helper that doesn't match",
       data: {
-        license: 'MIT'
+        license: 'MIT',
       },
       template: importstr './hbs/unless.hbs',
       expected: |||
         <div class='entry'>
         </div>
-      |||
+      |||,
     },
     {
       desc: "with an each block helper that doesn't match",
       data: {
         title: 'Hello world!',
-        comments: []
+        comments: [],
       },
       template: importstr './hbs/each-else.hbs',
       expected: |||
         Hello world!
         <div>No comments.</div>
-      |||
+      |||,
     },
     {
       desc: 'with an each block helper that uses this',
       data: { people: ['Yehuda Katz', 'Alan Johnson', 'Charles Jolley'] },
-      template: importstr './hbs/each-this.hbs'
+      template: importstr './hbs/each-this.hbs',
     },
     {
       desc: 'with an each block helper that uses @index',
-      data: { 'people': ['Yehuda Katz', 'Alan Johnson', 'Charles Jolley'] },
-      template: importstr './hbs/each-index.hbs'
+      data: { people: ['Yehuda Katz', 'Alan Johnson', 'Charles Jolley'] },
+      template: importstr './hbs/each-index.hbs',
     },
     {
       desc: 'with a with block helper',
@@ -96,10 +96,10 @@
         title: 'My first post!',
         author: {
           firstName: 'Charles',
-          lastName: 'Jolley'
-        }
+          lastName: 'Jolley',
+        },
       },
-      template: importstr './hbs/with.hbs'
-    }
-  ]
+      template: importstr './hbs/with.hbs',
+    },
+  ],
 }

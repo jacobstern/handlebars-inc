@@ -4,25 +4,25 @@
     {
       desc: 'in plain text',
       data: {
-        name: 'Jake'
+        name: 'Jake',
       },
-      template: importstr './hbs/hello.hbs'
+      template: importstr './hbs/hello.hbs',
     },
     {
       desc: 'inside an element tag',
       data: {
-        title: 'A Title'
+        title: 'A Title',
       },
-      template: importstr './hbs/element-content.hbs'
+      template: importstr './hbs/element-content.hbs',
     },
     {
       desc: 'with nested tags',
       data: {
         firstName: 'Jake',
         lastName: 'Stern',
-        content: 'Hello world!'
+        content: 'Hello world!',
       },
-      template: importstr './hbs/nested-tags.hbs'
-    }
-  ]
+      template: importstr './hbs/nested-tags.hbs',
+    },
+  ],
 }
