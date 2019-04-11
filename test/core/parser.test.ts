@@ -75,6 +75,41 @@ test('parses a fragment with unmatched closing tags', () => {
   ]);
 });
 
+test('parses a fragment with unmatched closing tags with text in between', () => {
+  let result = parseFragment('</h1><p>Test</p>Bar</span>Foo');
+  expect(result.type).toBe('fullTags');
+  expect(result.value.operations).toEqual([
+    {
+      type: 'elementClose',
+      value: { tagName: 'h1' }
+    },
+    {
+      type: 'elementOpen',
+      value: { tagName: 'p', propertyValuePairs: [] }
+    },
+    {
+      type: 'text',
+      value: { text: 'Test' }
+    },
+    {
+      type: 'elementClose',
+      value: { tagName: 'p' }
+    },
+    {
+      type: 'text',
+      value: { text: 'Bar' }
+    },
+    {
+      type: 'elementClose',
+      value: { tagName: 'span' }
+    },
+    {
+      type: 'text',
+      value: { text: 'Foo' }
+    }
+  ]);
+});
+
 test('parses a fragment with nested tags', () => {
   // prettier-ignore
   let result = parseFragment('<div class="foo"><h1>Hello</h1><div class="content"><strong>Test</strong></div></div>');

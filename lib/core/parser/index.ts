@@ -26,6 +26,14 @@ function getRemainingText(
   return '';
 }
 
+function stripTrailingTextNodes(ast: parse5.DefaultTreeDocumentFragment) {
+  let lastChild = ast.childNodes[ast.childNodes.length - 1];
+  while (lastChild && lastChild.nodeName === '#text') {
+    ast.childNodes.pop();
+    lastChild = ast.childNodes[ast.childNodes.length - 1];
+  }
+}
+
 function getPropertyValuePairs(
   attributes: parse5.Attribute[]
 ): PropertyValuePair[] {
@@ -114,6 +122,10 @@ export function parseFragment(fragment: string): ParseResult {
   let remaining = initialClosing.remaining;
   let ast = parse5.parseFragment(remaining, { sourceCodeLocationInfo: true });
   let fragmentAst = ast as parse5.DefaultTreeDocumentFragment;
+  // Sometimes if there are unmatched closing tags in the fragment, parse5 will
+  // give us text nodes that extend past the closing tag. We need to rewind and
+  // try to recover the closing tag.
+  stripTrailingTextNodes(fragmentAst);
   operations = operations.concat(getFragmentDOMOperations(fragmentAst));
   remaining = getRemainingText(remaining, fragmentAst);
   let endingClosing = parseClosingTags(remaining);
