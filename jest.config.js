@@ -11,7 +11,7 @@ module.exports = {
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   modulePathIgnorePatterns: [
     'vendor/handlebars.js/components/',
-    'vendor/handlebars.js/dist/'
+    'vendor/handlebars.js/dist/',
   ],
 
   // The test environment that will be used for testing
@@ -20,5 +20,5 @@ module.exports = {
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: ['/node_modules/', 'vendor/'],
 
-  watchPlugins: ['./test/jsonnet-watch-plugin']
+  watchPlugins: ['./test/jsonnet-watch-plugin', './test/webpack-watch-plugin'],
 };
