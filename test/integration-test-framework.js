@@ -2,8 +2,19 @@ import fs from 'fs';
 import path from 'path';
 import { Script } from 'vm';
 import Handlebars from 'handlebars';
+import parse5 from 'parse5';
 import HandlebarsIDOM from '../lib';
 import { JSDOM } from 'jsdom';
+
+/**
+ * Un-problematizes string comparison of HTML fragments, especially for
+ * self-closing tags which can be ambiguous.
+ *
+ * For example, `normalizeHTML('<input>') === normalizeHTML('<input></input>')`.
+ */
+export function normalizeHTML(fragment) {
+  return parse5.serialize(parse5.parseFragment(fragment));
+}
 
 function createRuntimeScript() {
   let idomBuildPath = path.join(__dirname, '../dist/runtime.js');
@@ -59,9 +70,11 @@ export function runIntegrationTests(configs) {
             if (expected == null) {
               expected = getExpectedFromHandlebars(hbsContent, example.data);
             }
+            let normalizedExpected = normalizeHTML(expected);
             let bundledHandlebarsTemplate = HandlebarsIDOM.compile(hbsContent);
             let bundledHandlebarsText = bundledHandlebarsTemplate(example.data);
-            expect(bundledHandlebarsText).toBe(expected);
+            let normalizedBundled = normalizeHTML(bundledHandlebarsText);
+            expect(normalizedBundled).toBe(normalizedExpected);
             let idomPrecompiled = HandlebarsIDOM.precompile(hbsContent, {
               idom: true
             });
@@ -74,7 +87,8 @@ export function runIntegrationTests(configs) {
               HandlebarsIDOM.IncrementalDOM.patch(mainDiv, thunk);
             `);
             let mainDiv = dom.window.document.getElementById('main');
-            expect(mainDiv.innerHTML).toEqual(expected);
+            let normalizedIDOM = normalizeHTML(mainDiv.innerHTML);
+            expect(normalizedIDOM).toEqual(normalizedExpected);
             done();
           });
         });
