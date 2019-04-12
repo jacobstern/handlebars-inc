@@ -16,6 +16,7 @@
     "jsonnet:build": "node ./scripts/build-test-jsonnet.js",
     "jsonnet:clean": "node ./scripts/clean-test-jsonnet.js",
     "jsonnet:fmt": "jsonnet fmt -i --indent 2 --max-blank-lines 2 --sort-imports --string-style s --comment-style s test/examples/*.jsonnet",
+    "prepare": "run-p runtime build",
     "pretest": "run-p --silent jsonnet runtime:development",
     "test": "jest",
     "test:watch": "npm run test -- --watch",
