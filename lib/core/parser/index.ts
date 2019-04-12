@@ -49,8 +49,8 @@ function getNodeDOMOperations(node: parse5.DefaultTreeNode): DOMOperation[] {
     operations.push({
       type: 'text',
       value: {
-        text: textNode.value
-      }
+        text: textNode.value,
+      },
     });
   } else if (!node.nodeName.startsWith('#')) {
     // Hash prefix is used for other "special" node types like comments
@@ -59,11 +59,11 @@ function getNodeDOMOperations(node: parse5.DefaultTreeNode): DOMOperation[] {
       type: 'elementOpen',
       value: {
         propertyValuePairs: getPropertyValuePairs(elementNode.attrs),
-        tagName: elementNode.tagName
-      }
+        tagName: elementNode.tagName,
+      },
     });
     elementNode.childNodes.forEach(node => {
-      operations = operations.concat(getNodeDOMOperations(node));
+      operations.push(...getNodeDOMOperations(node));
     });
     let sourceCodeLocation = elementNode.sourceCodeLocation;
     if (sourceCodeLocation == null) {
@@ -73,7 +73,7 @@ function getNodeDOMOperations(node: parse5.DefaultTreeNode): DOMOperation[] {
     if (hasClosingTag) {
       operations.push({
         type: 'elementClose',
-        value: { tagName: elementNode.tagName }
+        value: { tagName: elementNode.tagName },
       });
     }
   }
@@ -86,7 +86,7 @@ function getFragmentDOMOperations(
   let operations: DOMOperation[] = [];
   ast.childNodes.forEach(child => {
     let childNode = child as parse5.DefaultTreeNode;
-    operations = operations.concat(getNodeDOMOperations(childNode));
+    operations.push(...getNodeDOMOperations(childNode));
   });
   return operations;
 }
@@ -98,13 +98,13 @@ function getOperationsFromTags(tags: ClosingTagsSource[]): DOMOperation[] {
         case 'closingTag': {
           return {
             type: 'elementClose',
-            value: { tagName: tag.value.tagName }
+            value: { tagName: tag.value.tagName },
           };
         }
         case 'closingTagsInterstitialText': {
           return {
             type: 'text',
-            value: { text: tag.value.text }
+            value: { text: tag.value.text },
           };
         }
       }
@@ -118,7 +118,7 @@ export function parseFragment(fragment: string): ParseResult {
   // a valid fragment.
   // For example: '</div><p>...</p></div>'.
   let initialClosing = parseClosingTags(fragment);
-  operations = operations.concat(getOperationsFromTags(initialClosing.tags));
+  operations.push(...getOperationsFromTags(initialClosing.tags));
   let remaining = initialClosing.remaining;
   let ast = parse5.parseFragment(remaining, { sourceCodeLocationInfo: true });
   let fragmentAst = ast as parse5.DefaultTreeDocumentFragment;
@@ -126,9 +126,9 @@ export function parseFragment(fragment: string): ParseResult {
   // give us text nodes that extend past the closing tag. We need to rewind and
   // try to recover the closing tag.
   stripTrailingTextNodes(fragmentAst);
-  operations = operations.concat(getFragmentDOMOperations(fragmentAst));
+  operations.push(...getFragmentDOMOperations(fragmentAst));
   remaining = getRemainingText(remaining, fragmentAst);
   let endingClosing = parseClosingTags(remaining);
-  operations = operations.concat(getOperationsFromTags(endingClosing.tags));
+  operations.push(...getOperationsFromTags(endingClosing.tags));
   return { type: 'fullTags', value: { operations } };
 }

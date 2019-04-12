@@ -8,10 +8,10 @@ export function runIDOMToText(
     elementOpen(name, _key, staticAttributes, ...dynamicAttributes) {
       let attributes: string[] = [];
       if (staticAttributes != null) {
-        attributes = attributes.concat(staticAttributes);
+        attributes.push(...staticAttributes);
       }
       if (dynamicAttributes != null) {
-        attributes = attributes.concat(dynamicAttributes);
+        attributes.push(...dynamicAttributes);
       }
 
       let attributePairs: [string, string][] = [];
@@ -35,7 +35,7 @@ export function runIDOMToText(
     },
     text(text) {
       buffer += text;
-    }
+    },
   });
   return buffer;
 }

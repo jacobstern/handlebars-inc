@@ -27,7 +27,7 @@ module.exports = class WebpackWatchPlugin {
     jestHooks.onFileChange(async args => {
       let allTestPaths = [];
       args.projects.forEach(project => {
-        allTestPaths = allTestPaths.concat(project.testPaths);
+        allTestPaths.push(...project.testPaths);
       });
       let libDir = path.resolve(__dirname, '../lib');
       let sourceFiles = walkSync(libDir);
