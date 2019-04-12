@@ -23,7 +23,7 @@
     "test:now": "jest",
     "prettify": "prettier --write **/*.js **/*.ts",
     "prepublish": "run-p build runtime",
-    "prepack": "git submodule update --init --recursive"
+    "preinstall": "git submodule update --init --recursive"
   },
   "author": "Jacob Stern",
   "license": "MIT",
