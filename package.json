@@ -7,7 +7,6 @@
     "clean": "rimraf dist/",
     "prebuild": "npm run clean",
     "build": "babel lib/ --extensions \".ts,.js\" --out-dir dist/cjs",
-    "prepublishOnly": "npm run build",
     "lint": "eslint .",
     "runtime": "run-s runtime:clean runtime:build",
     "runtime:clean": "rimraf dist/runtime.js",
@@ -23,7 +22,8 @@
     "test:skipped": "npm run test -- --reporters jest-skipped-reporter",
     "test:now": "jest",
     "prettify": "prettier --write **/*.js **/*.ts",
-    "prepublish": "run-p build runtime"
+    "prepublish": "run-p build runtime",
+    "prepack": "git submodule update --init --recursive"
   },
   "author": "Jacob Stern",
   "license": "MIT",
