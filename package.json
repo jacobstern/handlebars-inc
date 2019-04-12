@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "runtime": "run-s runtime:clean runtime:build",
     "runtime:clean": "rimraf dist/runtime.js",
-    "runtime:build": "webpack --env prod",
+    "runtime:build": "webpack",
     "runtime:development": "webpack --env development",
     "jsonnet": "run-s jsonnet:clean jsonnet:build",
     "jsonnet:build": "node ./scripts/build-test-jsonnet.js",
@@ -22,7 +22,8 @@
     "test:watch": "npm run test -- --watch",
     "test:skipped": "npm run test -- --reporters jest-skipped-reporter",
     "test:now": "jest",
-    "pretify": "prettier --write **/*.js **/*.ts"
+    "prettify": "prettier --write **/*.js **/*.ts",
+    "prepublish": "run-p build runtime"
   },
   "author": "Jacob Stern",
   "license": "MIT",

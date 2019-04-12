@@ -2,7 +2,7 @@ let path = require('path');
 let MinifyPlugin = require('babel-minify-webpack-plugin');
 
 module.exports = env => {
-  let isProd = env === 'prod';
+  let isProd = env !== 'development';
   let plugins = [];
   if (isProd) {
     plugins.push(new MinifyPlugin());
