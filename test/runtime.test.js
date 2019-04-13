@@ -1,5 +1,6 @@
 import runtime from '../lib/index.runtime';
 import HandlebarsIDOM from '../lib';
+import { makeMockIncrementalDOM } from './test-helpers';
 
 test('throws on the property getter for incremental-dom in a Node environment', () => {
   expect(() => {
@@ -8,14 +9,7 @@ test('throws on the property getter for incremental-dom in a Node environment', 
 });
 
 test('accepts a custom incremental-dom implementation', () => {
-  let mockIncrementalDOM = {
-    elementOpen: jest.fn(),
-    elementClose: jest.fn(),
-    text: jest.fn(),
-    patch: jest.fn().mockImplementation((_element, thunk) => {
-      thunk();
-    })
-  };
+  let mockIncrementalDOM = makeMockIncrementalDOM();
   runtime.IncrementalDOM = mockIncrementalDOM;
   let template = HandlebarsIDOM.compile('<div>{{message}}</div>');
   HandlebarsIDOM.patch(

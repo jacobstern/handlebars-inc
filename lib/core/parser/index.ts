@@ -6,10 +6,32 @@ export interface ParsedFullTags {
   operations: DOMOperation[];
 }
 
-export type ParseResult = {
-  type: 'fullTags';
-  value: ParsedFullTags;
-};
+export type ParseResult =
+  | {
+      type: 'fullTags';
+      value: ParsedFullTags;
+    }
+  | {
+      type: 'invalidFragment';
+    };
+
+function getUnparsedLeadingText(
+  fragment: string,
+  ast: parse5.DefaultTreeDocumentFragment
+): string {
+  if (ast.childNodes.length) {
+    let firstChild = ast.childNodes[0];
+    let elementFirstChild = firstChild as parse5.DefaultTreeElement;
+    let sourceCodeLocation = elementFirstChild.sourceCodeLocation;
+    if (sourceCodeLocation == null) {
+      throw new Error('Tree must contain source info');
+    }
+    if (sourceCodeLocation.startOffset > 0) {
+      return fragment.slice(0, sourceCodeLocation.startOffset);
+    }
+  }
+  return '';
+}
 
 function getRemainingText(
   fragment: string,
@@ -122,6 +144,10 @@ export function parseFragment(fragment: string): ParseResult {
   let remaining = initialClosing.remaining;
   let ast = parse5.parseFragment(remaining, { sourceCodeLocationInfo: true });
   let fragmentAst = ast as parse5.DefaultTreeDocumentFragment;
+  let leadingText = getUnparsedLeadingText(remaining, fragmentAst);
+  if (leadingText.length > 0) {
+    return { type: 'invalidFragment' };
+  }
   // Sometimes if there are unmatched closing tags in the fragment, parse5 will
   // give us text nodes that extend past the closing tag. We need to rewind and
   // try to recover the closing tag.
@@ -130,5 +156,8 @@ export function parseFragment(fragment: string): ParseResult {
   remaining = getRemainingText(remaining, fragmentAst);
   let endingClosing = parseClosingTags(remaining);
   operations.push(...getOperationsFromTags(endingClosing.tags));
+  if (endingClosing.remaining.length > 0) {
+    return { type: 'invalidFragment' };
+  }
   return { type: 'fullTags', value: { operations } };
 }

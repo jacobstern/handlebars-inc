@@ -16,3 +16,14 @@ export function generateElementKey() {
 export function normalizeHTMLFragment(fragment) {
   return parse5.serialize(parse5.parseFragment(fragment));
 }
+
+export function makeMockIncrementalDOM() {
+  return {
+    elementOpen: jest.fn(),
+    elementClose: jest.fn(),
+    text: jest.fn(),
+    patch: jest.fn().mockImplementation((_element, thunk) => {
+      thunk();
+    }),
+  };
+}
