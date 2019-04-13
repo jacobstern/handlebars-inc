@@ -1,7 +1,7 @@
 let fs = require('fs');
 let path = require('path');
 let webpack = require('webpack');
-let webpackConfig = require('../webpack.config');
+let webpackConfig = require('../webpack.config')('development');
 let util = require('util');
 
 function walkSync(dir, accum = []) {

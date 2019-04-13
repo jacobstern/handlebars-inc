@@ -4,7 +4,7 @@ import { Script } from 'vm';
 import Handlebars from 'handlebars';
 import HandlebarsIDOM from '../lib';
 import { JSDOM } from 'jsdom';
-import { normalizeHTML } from './test-helpers';
+import { normalizeHTMLFragment } from './test-helpers';
 
 function createRuntimeScript() {
   let idomBuildPath = path.join(__dirname, '../dist/runtime.js');
@@ -62,12 +62,17 @@ export function runIntegrationTests(configs) {
           testFn = test.only;
         }
         testFn(example.desc, () => {
-          let { template: hbs, expected, partials } = example;
+          let {
+            template: hbs,
+            expected,
+            partials,
+            modes = ['text', 'idom'],
+          } = example;
           if (expected == null) {
             expected = getExpectedFromHandlebars(hbs, example.data, partials);
           }
-          expected = normalizeHTML(expected);
-          if (example.printExpected) {
+          expected = normalizeHTMLFragment(expected);
+          if (example.debugPrintExpected === true) {
             // eslint-disable-next-line no-console
             console.debug(`let expected = \`${expected}\`;`);
           }
@@ -76,32 +81,37 @@ export function runIntegrationTests(configs) {
               HandlebarsIDOM.registerPartial(key, partials[key]);
             }
           }
-          // console.log('Handlebars: ', Handlebars.precompile(hbs));
-          // console.log('IDOM', HandlebarsIDOM.precompile(hbs));
-          let template = HandlebarsIDOM.compile(hbs);
-          let text = template(example.data);
-          let normalizedText = normalizeHTML(text);
-          expect(normalizedText).toBe(expected);
-          let idomPrecompiled = HandlebarsIDOM.precompile(hbs);
-          let scriptPartials = '{\n';
-          if (partials != null) {
-            for (let key in partials) {
-              let precompiled = HandlebarsIDOM.precompile(partials[key]);
-              scriptPartials += `${key}: HandlebarsIDOM.template(${precompiled}),\n`;
-            }
+
+          if (modes.indexOf('text') >= 0) {
+            let template = HandlebarsIDOM.compile(hbs);
+            let text = template(example.data);
+            let normalizedText = normalizeHTMLFragment(text);
+            expect(normalizedText).toBe(expected);
           }
-          scriptPartials += '\n}';
-          let scriptData = JSON.stringify(example.data);
-          let dom = runInTestDOM(`
-              HandlebarsIDOM.partials = ${scriptPartials};
-              var mainDiv = document.getElementById('main');
-              var template = HandlebarsIDOM.template(${idomPrecompiled});
-              var thunk = template(${scriptData}, { backend: 'idom' });
-              HandlebarsIDOM.patch(mainDiv, thunk);
-            `);
-          let mainDiv = dom.window.document.getElementById('main');
-          let normalizedIDOM = normalizeHTML(mainDiv.innerHTML);
-          expect(normalizedIDOM).toBe(expected);
+
+          if (modes.indexOf('idom') >= 0) {
+            let idomPrecompiled = HandlebarsIDOM.precompile(hbs);
+            let scriptPartials = '{\n';
+            if (partials != null) {
+              for (let key in partials) {
+                let precompiled = HandlebarsIDOM.precompile(partials[key]);
+                scriptPartials += `${key}: HandlebarsIDOM.template(${precompiled}),\n`;
+              }
+            }
+            scriptPartials += '\n}';
+            let scriptData = JSON.stringify(example.data);
+            let dom = runInTestDOM(`
+                HandlebarsIDOM.partials = ${scriptPartials};
+                var mainDiv = document.getElementById('main');
+                var template = HandlebarsIDOM.template(${idomPrecompiled});
+                var thunk = template(${scriptData}, { backend: 'idom' });
+                HandlebarsIDOM.patch(mainDiv, thunk);
+              `);
+            let mainDiv = dom.window.document.getElementById('main');
+            let normalizedIDOM = normalizeHTMLFragment(mainDiv.innerHTML);
+            expect(normalizedIDOM).toBe(expected);
+          }
+
           for (let key in partials) {
             HandlebarsIDOM.unregisterPartial(key);
           }

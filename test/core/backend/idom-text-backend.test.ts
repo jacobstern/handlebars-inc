@@ -1,5 +1,5 @@
 import { runIDOMToText } from '../../../lib/core/backend/idom-text-backend';
-import { generateElementKey, normalizeHTML } from '../../test-helpers';
+import { generateElementKey, normalizeHTMLFragment } from '../../test-helpers';
 
 test('can render a basic HTML fragment', () => {
   let result = runIDOMToText(idom => {
@@ -7,7 +7,7 @@ test('can render a basic HTML fragment', () => {
       'class',
       'content',
       'id',
-      'root'
+      'root',
     ]);
     idom.elementOpen('h1', generateElementKey(), []);
     idom.text('Hello World');
@@ -15,8 +15,8 @@ test('can render a basic HTML fragment', () => {
     idom.text('Some content');
     idom.elementClose('div');
   });
-  let expected = normalizeHTML(
+  let expected = normalizeHTMLFragment(
     '<div class="content" id="root"><h1>Hello World</h1>Some content</div>'
   );
-  expect(normalizeHTML(result)).toBe(expected);
+  expect(normalizeHTMLFragment(result)).toBe(expected);
 });

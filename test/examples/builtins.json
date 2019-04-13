@@ -62,7 +62,7 @@
             "license": "MIT"
          },
          "desc": "with an unless block helper that doesn't match",
-         "expected": "<div class='entry'>\n</div>\n",
+         "expected": "<div class=\"entry\">\n</div>\n",
          "template": "<div class=\"entry\">\n  {{#unless license}}\n  <h3 class=\"warning\">WARNING: This entry does not have a license!</h3>\n  {{/unless}}\n</div>\n"
       },
       {

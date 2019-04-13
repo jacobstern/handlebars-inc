@@ -4,3 +4,5 @@ vendor/
 lib/helpers/each.js
 lib/compiler/javascript-compiler.js
 lib/runtime.js
+
+test/examples/html/

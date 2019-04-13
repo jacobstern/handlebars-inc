@@ -64,7 +64,7 @@
       },
       template: importstr './hbs/unless.hbs',
       expected: |||
-        <div class='entry'>
+        <div class="entry">
         </div>
       |||,
     },

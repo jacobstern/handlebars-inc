@@ -11,8 +11,8 @@ export function generateElementKey() {
  * Un-problematizes string comparison of HTML fragments, especially for
  * self-closing tags which can be ambiguous.
  *
- * For example, `normalizeHTML('<input>') === normalizeHTML('<input></input>')`.
+ * For example, `normalizeHTMLFragment('<input>') === normalizeHTMLFragment('<input></input>')`.
  */
-export function normalizeHTML(fragment) {
+export function normalizeHTMLFragment(fragment) {
   return parse5.serialize(parse5.parseFragment(fragment));
 }
