@@ -14,5 +14,13 @@ module.exports = api => {
       ['@babel/preset-env', presetEnvOptions],
       '@babel/preset-typescript',
     ],
+    plugins: [
+      [
+        'add-module-exports',
+        {
+          addDefaultProperty: true,
+        },
+      ],
+    ],
   };
 };
