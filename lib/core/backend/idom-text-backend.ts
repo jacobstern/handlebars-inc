@@ -1,15 +1,15 @@
-import { IDOMImplementation } from './idom-implementation';
+import { IdomImplementation } from './idom-implementation';
 
-export interface IDOMToTextExtras {
+export interface IdomToTextExtras {
   appendRaw: (text: string) => void;
 }
 
-export type IDOMToTextCallback = (
-  idom: IDOMImplementation,
-  extras: IDOMToTextExtras
+export type IdomToTextCallback = (
+  idom: IdomImplementation,
+  extras: IdomToTextExtras
 ) => void;
 
-export function runIDOMToText(callback: IDOMToTextCallback): string {
+export function runIdomToText(callback: IdomToTextCallback): string {
   let buffer = '';
   callback(
     {

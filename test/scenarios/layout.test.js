@@ -2,7 +2,7 @@ import util from 'util';
 import path from 'path';
 import fs from 'fs';
 import handlebars from '../../lib';
-import { makeMockIncrementalDOM } from '../test-helpers';
+import { makeMockIdom } from '../test-helpers';
 
 let readFileAsync = util.promisify(fs.readFile);
 
@@ -28,21 +28,16 @@ test('trying to render a page layout throws at runtime', async () => {
   let page = await readExamplesFile('hbs/page.hbs');
   let pageTemplate = handlebars.compile(page);
   let pageText = pageTemplate({ name: 'Jake' });
-  let idom = makeMockIncrementalDOM();
+  let mockIdom = makeMockIdom();
+  let templateOptions = { backend: 'idom', idom: mockIdom };
   expect(() => {
-    idom.patch(
+    mockIdom.patch(
       null,
-      layoutTemplate(
-        { body: pageText, title: 'My website' },
-        { backend: 'idom', IncrementalDOM: idom }
-      )
+      layoutTemplate({ body: pageText, title: 'My website' }, templateOptions)
     );
   }).toThrowError('invalid HTML fragment');
-  idom.patch(
-    null,
-    pageTemplate({ name: 'Jake' }, { backend: 'idom', IncrementalDOM: idom })
-  );
-  expect(idom.elementOpen).toBeCalledTimes(1);
-  expect(idom.text).toBeCalled();
-  expect(idom.elementClose).toBeCalledTimes(1);
+  mockIdom.patch(null, pageTemplate({ name: 'Jake' }, templateOptions));
+  expect(mockIdom.elementOpen).toBeCalledTimes(1);
+  expect(mockIdom.text).toBeCalled();
+  expect(mockIdom.elementClose).toBeCalledTimes(1);
 });

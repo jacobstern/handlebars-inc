@@ -17,7 +17,7 @@ export function normalizeHTMLFragment(fragment) {
   return parse5.serialize(parse5.parseFragment(fragment));
 }
 
-export function makeMockIncrementalDOM() {
+export function makeMockIdom() {
   return {
     elementOpen: jest.fn(),
     elementClose: jest.fn(),

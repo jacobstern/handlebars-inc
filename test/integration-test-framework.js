@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { Script } from 'vm';
 import Handlebars from 'handlebars';
-import HandlebarsIDOM from '../lib';
+import HandlebarsIdom from '../lib';
 import { JSDOM } from 'jsdom';
 import { normalizeHTMLFragment } from './test-helpers';
 
@@ -78,42 +78,42 @@ export function runIntegrationTests(configs) {
           }
           if (partials != null) {
             for (let key in partials) {
-              HandlebarsIDOM.registerPartial(key, partials[key]);
+              HandlebarsIdom.registerPartial(key, partials[key]);
             }
           }
 
           if (modes.indexOf('text') >= 0) {
-            let template = HandlebarsIDOM.compile(hbs);
+            let template = HandlebarsIdom.compile(hbs);
             let text = template(example.data);
             let normalizedText = normalizeHTMLFragment(text);
             expect(normalizedText).toBe(expected);
           }
 
           if (modes.indexOf('idom') >= 0) {
-            let idomPrecompiled = HandlebarsIDOM.precompile(hbs);
+            let idomPrecompiled = HandlebarsIdom.precompile(hbs);
             let scriptPartials = '{\n';
             if (partials != null) {
               for (let key in partials) {
-                let precompiled = HandlebarsIDOM.precompile(partials[key]);
-                scriptPartials += `${key}: HandlebarsIDOM.template(${precompiled}),\n`;
+                let precompiled = HandlebarsIdom.precompile(partials[key]);
+                scriptPartials += `${key}: HandlebarsIdom.template(${precompiled}),\n`;
               }
             }
             scriptPartials += '\n}';
             let scriptData = JSON.stringify(example.data);
             let dom = runInTestDOM(`
-                HandlebarsIDOM.partials = ${scriptPartials};
+                HandlebarsIdom.partials = ${scriptPartials};
                 var mainDiv = document.getElementById('main');
-                var template = HandlebarsIDOM.template(${idomPrecompiled});
+                var template = HandlebarsIdom.template(${idomPrecompiled});
                 var thunk = template(${scriptData}, { backend: 'idom' });
-                HandlebarsIDOM.patch(mainDiv, thunk);
+                HandlebarsIdom.patch(mainDiv, thunk);
               `);
             let mainDiv = dom.window.document.getElementById('main');
-            let normalizedIDOM = normalizeHTMLFragment(mainDiv.innerHTML);
-            expect(normalizedIDOM).toBe(expected);
+            let normalizedIdom = normalizeHTMLFragment(mainDiv.innerHTML);
+            expect(normalizedIdom).toBe(expected);
           }
 
           for (let key in partials) {
-            HandlebarsIDOM.unregisterPartial(key);
+            HandlebarsIdom.unregisterPartial(key);
           }
         });
       });

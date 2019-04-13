@@ -1,8 +1,8 @@
-import { runIDOMToText } from '../../../lib/core/backend/idom-text-backend';
+import { runIdomToText } from '../../../lib/core/backend/idom-text-backend';
 import { generateElementKey, normalizeHTMLFragment } from '../../test-helpers';
 
 test('can render a basic HTML fragment', () => {
-  let result = runIDOMToText(idom => {
+  let result = runIdomToText(idom => {
     idom.elementOpen('div', generateElementKey(), [
       'class',
       'content',

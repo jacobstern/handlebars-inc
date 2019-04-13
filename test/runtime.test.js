@@ -1,24 +1,13 @@
-import runtime from '../lib/index.runtime';
-import HandlebarsIDOM from '../lib';
-import { makeMockIncrementalDOM } from './test-helpers';
-
-test('throws on the property getter for incremental-dom in a Node environment', () => {
-  expect(() => {
-    runtime.IncrementalDOM;
-  }).toThrowError(/HandlebarsIDOM.IncrementalDOM was not loaded/);
-});
+import HandlebarsIdom from '../lib';
+import { makeMockIdom } from './test-helpers';
 
 test('accepts a custom incremental-dom implementation', () => {
-  let mockIncrementalDOM = makeMockIncrementalDOM();
-  runtime.IncrementalDOM = mockIncrementalDOM;
-  let template = HandlebarsIDOM.compile('<div>{{message}}</div>');
-  HandlebarsIDOM.patch(
+  let mockIdom = makeMockIdom();
+  let template = HandlebarsIdom.compile('<div>{{message}}</div>');
+  HandlebarsIdom.idom = mockIdom;
+  HandlebarsIdom.patch(
     null,
-    template({ message: 'Hello world' }, { backend: 'idom' })
+    template({ message: 'Hello world' }, { backend: 'idom', idom: mockIdom })
   );
-  expect(mockIncrementalDOM.elementOpen).toBeCalled();
-});
-
-afterEach(() => {
-  runtime.IncrementalDOM = null;
+  expect(mockIdom.elementOpen).toBeCalled();
 });

@@ -1,3 +1,3 @@
-import HandlebarsIDOM from '../lib/index.runtime';
+import HandlebarsIdom from '../lib/index.runtime';
 
-window.HandlebarsIDOM = HandlebarsIDOM;
+window.HandlebarsIdom = HandlebarsIdom;
