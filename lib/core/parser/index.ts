@@ -2,6 +2,23 @@ import parse5 from 'parse5';
 import { DOMOperation, PropertyValuePair } from '../dom-operation';
 import { parseClosingTags, ClosingTagsSource } from './closing-tags-parser';
 
+const EMPTY_ELEMENTS = [
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr',
+];
+
 export interface ParsedFullTags {
   operations: DOMOperation[];
 }
@@ -79,25 +96,35 @@ function getNodeDOMOperations(node: parse5.DefaultTreeNode): DOMOperation[] {
   } else if (!node.nodeName.startsWith('#')) {
     // Hash prefix is used for other "special" node types like comments
     let elementNode = node as parse5.DefaultTreeElement;
-    operations.push({
-      type: 'elementOpen',
-      value: {
-        propertyValuePairs: getPropertyValuePairs(elementNode.attrs),
-        tagName: elementNode.tagName,
-      },
-    });
-    elementNode.childNodes.forEach(node => {
-      operations.push(...getNodeDOMOperations(node));
-    });
-    let sourceCodeLocation = elementNode.sourceCodeLocation;
-    if (sourceCodeLocation == null) {
-      throw new Error('Tree must contain source info');
-    }
-    let hasClosingTag = Boolean(sourceCodeLocation.endTag);
-    if (hasClosingTag) {
+    if (EMPTY_ELEMENTS.indexOf(elementNode.tagName) < 0) {
       operations.push({
-        type: 'elementClose',
-        value: { tagName: elementNode.tagName },
+        type: 'elementOpen',
+        value: {
+          propertyValuePairs: getPropertyValuePairs(elementNode.attrs),
+          tagName: elementNode.tagName,
+        },
+      });
+      elementNode.childNodes.forEach(node => {
+        operations.push(...getNodeDOMOperations(node));
+      });
+      let sourceCodeLocation = elementNode.sourceCodeLocation;
+      if (sourceCodeLocation == null) {
+        throw new Error('Tree must contain source info');
+      }
+      let hasClosingTag = Boolean(sourceCodeLocation.endTag);
+      if (hasClosingTag) {
+        operations.push({
+          type: 'elementClose',
+          value: { tagName: elementNode.tagName },
+        });
+      }
+    } else {
+      operations.push({
+        type: 'emptyElement',
+        value: {
+          propertyValuePairs: getPropertyValuePairs(elementNode.attrs),
+          tagName: elementNode.tagName,
+        },
       });
     }
   }

@@ -1,12 +1,13 @@
 {
-  desc: 'the compiler can generate common HTML constructs, such as',
+  desc: 'the compiler can generate common HTML constructs',
   examples: [
     {
-      desc: 'multiple attributes on an <input> tag',
+      desc: 'such as multiple attributes on an <input> tag',
       template: importstr './hbs/input-attrs.hbs',
-      expected: |||
-        <input type="text" placeholder="Name"></input>
-      |||,
+    },
+    {
+      desc: 'such as a basic input element in a search page',
+      template: importstr './hbs/bulma-search.hbs',
     },
   ],
 }

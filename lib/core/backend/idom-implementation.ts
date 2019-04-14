@@ -5,6 +5,7 @@ type Void<T extends (...args: any[]) => void> = (
 ) => void;
 
 export interface IdomImplementation {
+  elementVoid: Void<typeof IncrementalDOM.elementVoid>;
   elementOpen: Void<typeof IncrementalDOM.elementOpen>;
   elementClose: Void<typeof IncrementalDOM.elementClose>;
   text: Void<typeof IncrementalDOM.text>;

@@ -1,10 +1,13 @@
 {
-   "desc": "the compiler can generate common HTML constructs, such as",
+   "desc": "the compiler can generate common HTML constructs",
    "examples": [
       {
-         "desc": "multiple attributes on an <input> tag",
-         "expected": "<input type=\"text\" placeholder=\"Name\"></input>\n",
-         "template": "<input type=\"text\" placeholder=\"Name\"></input>\n"
+         "desc": "such as multiple attributes on an <input> tag",
+         "template": "<input type=\"text\" placeholder=\"Name\">"
+      },
+      {
+         "desc": "such as a basic input element in a search page",
+         "template": "<div class=\"control\">\n  <input id=\"search-input\" class=\"input\" type=\"text\">\n</div>\n"
       }
    ]
 }

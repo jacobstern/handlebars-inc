@@ -13,30 +13,14 @@ export function runIdomToText(callback: IdomToTextCallback): string {
   let buffer = '';
   callback(
     {
-      elementOpen(name, _key, staticAttributes, ...dynamicAttributes) {
-        let attributes: string[] = [];
-        if (staticAttributes != null) {
-          attributes.push(...staticAttributes);
-        }
-        if (dynamicAttributes != null) {
-          attributes.push(...dynamicAttributes);
-        }
-
-        let attributePairs: [string, string][] = [];
-        let previousAttribute: string | undefined;
-        attributes.forEach((value, index) => {
-          if (index % 2 === 1) {
-            attributePairs.push([previousAttribute!, value]);
-          }
-          previousAttribute = value;
-        });
-
-        let attributesContent = '';
-        attributePairs.forEach(([key, value]) => {
-          attributesContent += ` ${key}="${value}"`;
-        });
-
-        buffer += `<${name}${attributesContent}>`;
+      elementVoid(name, _key, staticAttrs, ...dynamicAttrs) {
+        let tagContents = generateTagContents(staticAttrs, dynamicAttrs);
+        // HandlebarsIdom uses `elementVoid()` for self-closing tags
+        buffer += `<${name}${tagContents}>`;
+      },
+      elementOpen(name, _key, staticAttrs, ...dynamicAttrs) {
+        let tagContents = generateTagContents(staticAttrs, dynamicAttrs);
+        buffer += `<${name}${tagContents}>`;
       },
       elementClose(name) {
         buffer += `</${name}>`;
@@ -52,4 +36,27 @@ export function runIdomToText(callback: IdomToTextCallback): string {
     }
   );
   return buffer;
+}
+
+function generateTagContents(staticAttrs?: string[], dynamicAttrs?: string[]) {
+  let attributes: string[] = [];
+  if (staticAttrs != null) {
+    attributes.push(...staticAttrs);
+  }
+  if (dynamicAttrs != null) {
+    attributes.push(...dynamicAttrs);
+  }
+  let attributePairs: [string, string][] = [];
+  let previousAttribute: string | undefined;
+  attributes.forEach((value, index) => {
+    if (index % 2 === 1) {
+      attributePairs.push([previousAttribute!, value]);
+    }
+    previousAttribute = value;
+  });
+  let tagContents = '';
+  attributePairs.forEach(([key, value]) => {
+    tagContents += ` ${key}="${value}"`;
+  });
+  return tagContents;
 }

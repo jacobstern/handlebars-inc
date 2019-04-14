@@ -227,3 +227,7 @@ test('parses a partial fragment with nested tags', () => {
     },
   ]);
 });
+
+test.todo('generates the correct operations for self closing tags');
+
+test.todo('handles XML-style self closing tag');
