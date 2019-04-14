@@ -19,16 +19,17 @@ function getUnparsedLeadingText(
   fragment: string,
   ast: parse5.DefaultTreeDocumentFragment
 ): string {
-  if (ast.childNodes.length) {
-    let firstChild = ast.childNodes[0];
-    let elementFirstChild = firstChild as parse5.DefaultTreeElement;
-    let sourceCodeLocation = elementFirstChild.sourceCodeLocation;
-    if (sourceCodeLocation == null) {
-      throw new Error('Tree must contain source info');
-    }
-    if (sourceCodeLocation.startOffset > 0) {
-      return fragment.slice(0, sourceCodeLocation.startOffset);
-    }
+  if (ast.childNodes.length === 0) {
+    return fragment;
+  }
+  let firstChild = ast.childNodes[0];
+  let elementFirstChild = firstChild as parse5.DefaultTreeElement;
+  let sourceCodeLocation = elementFirstChild.sourceCodeLocation;
+  if (sourceCodeLocation == null) {
+    throw new Error('Tree must contain source info');
+  }
+  if (sourceCodeLocation.startOffset > 0) {
+    return fragment.slice(0, sourceCodeLocation.startOffset);
   }
   return '';
 }
@@ -37,13 +38,14 @@ function getRemainingText(
   fragment: string,
   ast: parse5.DefaultTreeDocumentFragment
 ): string {
-  if (ast.childNodes.length) {
-    let lastChild = ast.childNodes[ast.childNodes.length - 1];
-    let elementLastChild = lastChild as parse5.DefaultTreeElement;
-    let sourceLocation = elementLastChild.sourceCodeLocation;
-    if (sourceLocation && sourceLocation.endOffset < fragment.length) {
-      return fragment.slice(sourceLocation.endOffset);
-    }
+  if (ast.childNodes.length === 0) {
+    return fragment;
+  }
+  let lastChild = ast.childNodes[ast.childNodes.length - 1];
+  let elementLastChild = lastChild as parse5.DefaultTreeElement;
+  let sourceLocation = elementLastChild.sourceCodeLocation;
+  if (sourceLocation && sourceLocation.endOffset < fragment.length) {
+    return fragment.slice(sourceLocation.endOffset);
   }
   return '';
 }

@@ -182,6 +182,11 @@ test('parses a fragment with nested tags', () => {
   ]);
 });
 
+test('fails to parse a partial opening <script> tag', () => {
+  let result = parseFragment('<script src="');
+  expect(result.type).toBe('invalidFragment');
+});
+
 test('parses a partial fragment with nested tags', () => {
   // prettier-ignore
   let result = parseFragment('<div class="foo"><h1>Hello</h1><div class="content">');
