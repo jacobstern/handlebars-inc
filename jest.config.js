@@ -22,5 +22,10 @@ module.exports = {
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: ['/node_modules/', 'vendor/'],
 
-  watchPlugins: ['./test/jsonnet-watch-plugin', './test/webpack-watch-plugin'],
+  watchPlugins: [
+    'jest-watch-typeahead/testname',
+    'jest-watch-typeahead/filename',
+    './test/jsonnet-watch-plugin',
+    './test/webpack-watch-plugin',
+  ],
 };
