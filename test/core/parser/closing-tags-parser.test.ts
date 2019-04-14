@@ -5,7 +5,7 @@ test('recognizes a closing tag and subsequent text', () => {
   expect(result.remaining).toBe('');
   expect(result.tags).toEqual([
     { type: 'closingTag', value: { tagName: 'div' } },
-    { type: 'closingTagsInterstitialText', value: { text: 'Hello' } }
+    { type: 'closingTagsInterstitialText', value: { text: 'Hello' } },
   ]);
 });
 
@@ -15,7 +15,7 @@ test('recognizes multiple closing tags and stops at an opening tag', () => {
   expect(result.tags).toEqual([
     { type: 'closingTag', value: { tagName: 'div' } },
     { type: 'closingTagsInterstitialText', value: { text: 'Hello!\n' } },
-    { type: 'closingTag', value: { tagName: 'span' } }
+    { type: 'closingTag', value: { tagName: 'span' } },
   ]);
 });
 
@@ -28,7 +28,7 @@ test('recognizes a closing h1 tag', () => {
   let result = parseClosingTags('</h1><div>');
   expect(result.remaining).toBe('<div>');
   expect(result.tags).toEqual([
-    { type: 'closingTag', value: { tagName: 'h1' } }
+    { type: 'closingTag', value: { tagName: 'h1' } },
   ]);
 });
 
@@ -36,6 +36,6 @@ test('returns no result for a string beginning with opening tags', () => {
   let result = parseClosingTags('<div>Hello</div>');
   expect(result).toEqual({
     tags: [],
-    remaining: '<div>Hello</div>'
+    remaining: '<div>Hello</div>',
   });
 });

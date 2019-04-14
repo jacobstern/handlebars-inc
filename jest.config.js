@@ -5,6 +5,8 @@ module.exports = {
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)$',
   moduleFileExtensions: ['ts', 'js'],
 
+  preset: 'ts-jest/presets/js-with-babel',
+
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
 

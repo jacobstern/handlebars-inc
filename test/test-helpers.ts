@@ -3,7 +3,7 @@ import { Chance } from 'chance';
 
 let chance = new Chance();
 
-export function generateElementKey() {
+export function generateElementKey(): string {
   return chance.hash({ length: 15 });
 }
 
@@ -13,7 +13,7 @@ export function generateElementKey() {
  *
  * For example, `normalizeHTMLFragment('<input>') === normalizeHTMLFragment('<input></input>')`.
  */
-export function normalizeHTMLFragment(fragment) {
+export function normalizeHTMLFragment(fragment: string): string {
   return parse5.serialize(parse5.parseFragment(fragment));
 }
 

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["esnext", "dom"],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -15,5 +15,5 @@
     "noEmit": true,
     "jsx": "preserve"
   },
-  "include": ["lib"]
+  "include": ["lib", "test"]
 }

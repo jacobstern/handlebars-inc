@@ -1,7 +1,8 @@
 module.exports = api => {
-  let presetEnvOptions;
-  let isRuntime = api.env() === 'runtime';
+  let env = api.env();
+  let isRuntime = env === 'runtime';
 
+  let presetEnvOptions;
   if (isRuntime) {
     presetEnvOptions = { modules: 'auto' };
   } else {

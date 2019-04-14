@@ -20,16 +20,16 @@ test('parses an element with contents and attributes', () => {
   expect(result.value.operations).toEqual([
     {
       type: 'elementOpen',
-      value: { tagName: 'div', propertyValuePairs: [['class', 'foo']] }
+      value: { tagName: 'div', propertyValuePairs: [['class', 'foo']] },
     },
     {
       type: 'text',
-      value: { text: 'Test' }
+      value: { text: 'Test' },
     },
     {
       type: 'elementClose',
-      value: { tagName: 'div' }
-    }
+      value: { tagName: 'div' },
+    },
   ]);
 });
 
@@ -39,12 +39,12 @@ test('parses a fragment with an unclosed tag', () => {
   expect(result.value.operations).toEqual([
     {
       type: 'elementOpen',
-      value: { tagName: 'div', propertyValuePairs: [['class', 'foo']] }
+      value: { tagName: 'div', propertyValuePairs: [['class', 'foo']] },
     },
     {
       type: 'text',
-      value: { text: 'Te' }
-    }
+      value: { text: 'Te' },
+    },
   ]);
 });
 
@@ -54,24 +54,24 @@ test('parses a fragment with unmatched closing tags', () => {
   expect(result.value.operations).toEqual([
     {
       type: 'elementClose',
-      value: { tagName: 'h1' }
+      value: { tagName: 'h1' },
     },
     {
       type: 'elementOpen',
-      value: { tagName: 'p', propertyValuePairs: [] }
+      value: { tagName: 'p', propertyValuePairs: [] },
     },
     {
       type: 'text',
-      value: { text: 'Test' }
+      value: { text: 'Test' },
     },
     {
       type: 'elementClose',
-      value: { tagName: 'p' }
+      value: { tagName: 'p' },
     },
     {
       type: 'elementClose',
-      value: { tagName: 'span' }
-    }
+      value: { tagName: 'span' },
+    },
   ]);
 });
 
@@ -81,32 +81,32 @@ test('parses a fragment with unmatched closing tags with text in between', () =>
   expect(result.value.operations).toEqual([
     {
       type: 'elementClose',
-      value: { tagName: 'h1' }
+      value: { tagName: 'h1' },
     },
     {
       type: 'elementOpen',
-      value: { tagName: 'p', propertyValuePairs: [] }
+      value: { tagName: 'p', propertyValuePairs: [] },
     },
     {
       type: 'text',
-      value: { text: 'Test' }
+      value: { text: 'Test' },
     },
     {
       type: 'elementClose',
-      value: { tagName: 'p' }
+      value: { tagName: 'p' },
     },
     {
       type: 'text',
-      value: { text: 'Bar' }
+      value: { text: 'Bar' },
     },
     {
       type: 'elementClose',
-      value: { tagName: 'span' }
+      value: { tagName: 'span' },
     },
     {
       type: 'text',
-      value: { text: 'Foo' }
-    }
+      value: { text: 'Foo' },
+    },
   ]);
 });
 
@@ -119,66 +119,66 @@ test('parses a fragment with nested tags', () => {
       type: 'elementOpen',
       value: {
         propertyValuePairs: [['class', 'foo']],
-        tagName: 'div'
-      }
+        tagName: 'div',
+      },
     },
     {
       type: 'elementOpen',
       value: {
         propertyValuePairs: [],
-        tagName: 'h1'
-      }
+        tagName: 'h1',
+      },
     },
     {
       type: 'text',
       value: {
-        text: 'Hello'
-      }
+        text: 'Hello',
+      },
     },
     {
       type: 'elementClose',
       value: {
-        tagName: 'h1'
-      }
+        tagName: 'h1',
+      },
     },
     {
       type: 'elementOpen',
       value: {
         propertyValuePairs: [['class', 'content']],
-        tagName: 'div'
-      }
+        tagName: 'div',
+      },
     },
     {
       type: 'elementOpen',
       value: {
         propertyValuePairs: [],
-        tagName: 'strong'
-      }
+        tagName: 'strong',
+      },
     },
     {
       type: 'text',
       value: {
-        text: 'Test'
-      }
+        text: 'Test',
+      },
     },
     {
       type: 'elementClose',
       value: {
-        tagName: 'strong'
-      }
+        tagName: 'strong',
+      },
     },
     {
       type: 'elementClose',
       value: {
-        tagName: 'div'
-      }
+        tagName: 'div',
+      },
     },
     {
       type: 'elementClose',
       value: {
-        tagName: 'div'
-      }
-    }
+        tagName: 'div',
+      },
+    },
   ]);
 });
 
@@ -191,34 +191,34 @@ test('parses a partial fragment with nested tags', () => {
       type: 'elementOpen',
       value: {
         propertyValuePairs: [['class', 'foo']],
-        tagName: 'div'
-      }
+        tagName: 'div',
+      },
     },
     {
       type: 'elementOpen',
       value: {
         propertyValuePairs: [],
-        tagName: 'h1'
-      }
+        tagName: 'h1',
+      },
     },
     {
       type: 'text',
       value: {
-        text: 'Hello'
-      }
+        text: 'Hello',
+      },
     },
     {
       type: 'elementClose',
       value: {
-        tagName: 'h1'
-      }
+        tagName: 'h1',
+      },
     },
     {
       type: 'elementOpen',
       value: {
         propertyValuePairs: [['class', 'content']],
-        tagName: 'div'
-      }
-    }
+        tagName: 'div',
+      },
+    },
   ]);
 });
