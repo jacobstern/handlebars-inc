@@ -1,5 +1,15 @@
 import parse5 from 'parse5';
+import util from 'util';
+import path from 'path';
+import fs from 'fs';
 import { Chance } from 'chance';
+
+let readFileAsync = util.promisify(fs.readFile);
+
+export async function readExamplesFile(file: string) {
+  let hbsDir = path.resolve(__dirname, 'examples/');
+  return await readFileAsync(path.join(hbsDir, file), 'utf8');
+}
 
 let chance = new Chance();
 
@@ -19,6 +29,7 @@ export function normalizeHTMLFragment(fragment: string): string {
 
 export function makeMockIdom() {
   return {
+    elementVoid: jest.fn(),
     elementOpen: jest.fn(),
     elementClose: jest.fn(),
     text: jest.fn(),

@@ -1,40 +1,26 @@
 import { IdomImplementation } from './idom-implementation';
 
-export interface IdomToTextExtras {
-  appendRaw: (text: string) => void;
-}
-
-export type IdomToTextCallback = (
-  idom: IdomImplementation,
-  extras: IdomToTextExtras
-) => void;
+export type IdomToTextCallback = (idom: IdomImplementation) => void;
 
 export function runIdomToText(callback: IdomToTextCallback): string {
   let buffer = '';
-  callback(
-    {
-      elementVoid(name, _key, staticAttrs, ...dynamicAttrs) {
-        let tagContents = generateTagContents(staticAttrs, dynamicAttrs);
-        // HandlebarsIdom uses `elementVoid()` for self-closing tags
-        buffer += `<${name}${tagContents}>`;
-      },
-      elementOpen(name, _key, staticAttrs, ...dynamicAttrs) {
-        let tagContents = generateTagContents(staticAttrs, dynamicAttrs);
-        buffer += `<${name}${tagContents}>`;
-      },
-      elementClose(name) {
-        buffer += `</${name}>`;
-      },
-      text(text) {
-        buffer += text;
-      },
+  callback({
+    elementVoid(name, _key, staticAttrs, ...dynamicAttrs) {
+      let tagContents = generateTagContents(staticAttrs, dynamicAttrs);
+      // HandlebarsIdom uses `elementVoid()` for self-closing tags
+      buffer += `<${name}${tagContents}>`;
     },
-    {
-      appendRaw: text => {
-        buffer += text;
-      },
-    }
-  );
+    elementOpen(name, _key, staticAttrs, ...dynamicAttrs) {
+      let tagContents = generateTagContents(staticAttrs, dynamicAttrs);
+      buffer += `<${name}${tagContents}>`;
+    },
+    elementClose(name) {
+      buffer += `</${name}>`;
+    },
+    text(text) {
+      buffer += text;
+    },
+  });
   return buffer;
 }
 

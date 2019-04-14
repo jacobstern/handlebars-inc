@@ -1,15 +1,32 @@
 {
-   "desc": "the compiler properly handles escaped and unescaped constructs",
+   "desc": "the compiler properly handles escaped and unescaped constructs, such as",
    "examples": [
       {
          "data": {
             "content": "<h1>My Post</h1>"
          },
-         "desc": "such as an unescaped string when using the text backend",
+         "desc": "an unescaped HTML string when using the text backend",
          "modes": [
             "text"
          ],
          "template": "<div class=\"content\">{{{content}}}</div>"
+      },
+      {
+         "data": {
+            "title": "Peace and Love <3"
+         },
+         "desc": "element content with HTML-escaped characters",
+         "template": "<h1>{{title}}</h1>"
+      },
+      {
+         "data": {
+            "title": "Peace and Love <3"
+         },
+         "desc": "an element with HTML-escaped characters in a partial",
+         "partials": {
+            "title": "<h1>{{title}}</h1>"
+         },
+         "template": "<div>\n{{> title }}\n</div>"
       }
    ]
 }
