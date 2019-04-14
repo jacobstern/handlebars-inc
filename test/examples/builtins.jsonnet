@@ -91,6 +91,11 @@
       template: importstr './hbs/each-index.hbs',
     },
     {
+      desc: 'with an each block helper that uses @key',
+      data: { peopleByName: { Sam: 'Sam Seder', Michael: 'Michael Brooks', Jamie: 'Jamie Peck' } },
+      template: importstr './hbs/each-key.hbs',
+    },
+    {
       desc: 'with a with block helper',
       data: {
         title: 'My first post!',

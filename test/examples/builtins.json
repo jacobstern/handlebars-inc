@@ -94,7 +94,18 @@
             ]
          },
          "desc": "with an each block helper that uses @index",
-         "template": "<ul class=\"people-list\">\n  {{#each people}}\n  <li>{{this}}</li>\n  {{/each}}\n</ul>"
+         "template": "<ul class=\"people-list\">\n  {{#each people}}\n  <li>{{@index}} - {{this}}</li>\n  {{/each}}\n</ul>"
+      },
+      {
+         "data": {
+            "peopleByName": {
+               "Jamie": "Jamie Peck",
+               "Michael": "Michael Brooks",
+               "Sam": "Sam Seder"
+            }
+         },
+         "desc": "with an each block helper that uses @key",
+         "template": "<ul class=\"people-list\">\n  {{#each peopleByName}}\n  <li>{{@key}} - {{this}}</li>\n  {{/each}}\n</ul>"
       },
       {
          "data": {
