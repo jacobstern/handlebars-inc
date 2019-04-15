@@ -164,6 +164,19 @@ function getOperationsFromTags(tags: ClosingTagsSource[]): DOMOperation[] {
 }
 
 export function parseFragment(fragment: string): ParseResult {
+  if (fragment === '') {
+    return {
+      type: 'fullTags',
+      value: { operations: [] },
+    };
+  }
+  if (fragment.indexOf('<') === -1 && fragment.indexOf('>') === -1) {
+    // As an optimization, bail out early if there are no HTML tags here
+    return {
+      type: 'fullTags',
+      value: { operations: [{ type: 'text', value: { text: fragment } }] },
+    };
+  }
   let operations: DOMOperation[] = [];
   // There may be unmatched closing tags at either the beginning or very end of
   // a valid fragment.
