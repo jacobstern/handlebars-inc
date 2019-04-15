@@ -281,3 +281,51 @@ test('handles XML-style self closing tag', () => {
     },
   ]);
 });
+
+test('parses an open partial tag at the end of a fragment', () => {
+  let result = parseFragment('<div><input type="');
+  expect(result.type).toBe('openPartialTag');
+  expect(result.value).toEqual({
+    leadingOperations: [
+      {
+        type: 'elementOpen',
+        value: {
+          tagName: 'div',
+          propertyValuePairs: [],
+        },
+      },
+    ],
+    tagName: 'input',
+    content: ' type="',
+  });
+});
+
+test('parses an open partial tag after an unmatched closing tag', () => {
+  let result = parseFragment('Text</span><div><input type="');
+  expect(result.type).toBe('openPartialTag');
+  expect(result.value).toEqual({
+    leadingOperations: [
+      {
+        type: 'text',
+        value: {
+          text: 'Text',
+        },
+      },
+      {
+        type: 'elementClose',
+        value: {
+          tagName: 'span',
+        },
+      },
+      {
+        type: 'elementOpen',
+        value: {
+          tagName: 'div',
+          propertyValuePairs: [],
+        },
+      },
+    ],
+    tagName: 'input',
+    content: ' type="',
+  });
+});

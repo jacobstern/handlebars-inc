@@ -8,18 +8,16 @@ export interface PartialTagEnd {
   remaining: string;
 }
 
-const OPEN_PARTIAL_TAG_REGEX = /^<([a-zA-Z]+)(?=\s)/;
+const OPEN_PARTIAL_TAG_REGEX = /<([a-zA-Z]+)(\s+[^>]*)$/;
 
 export function parseOpenPartialTag(
   fragment: string
 ): OpenPartialTag | undefined {
   let match = fragment.match(OPEN_PARTIAL_TAG_REGEX);
   if (match != null) {
-    let [entire, tagName] = match;
-    return {
-      tagName,
-      content: fragment.substring(entire.length),
-    };
+    let tagName = match[1];
+    let content = match[2];
+    return { tagName, content };
   }
 }
 

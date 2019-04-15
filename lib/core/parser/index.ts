@@ -1,6 +1,7 @@
 import parse5 from 'parse5';
 import { DOMOperation, PropertyValuePair } from '../dom-operation';
 import { parseClosingTags, ClosingTagsSource } from './closing-tags-parser';
+import { parseOpenPartialTag } from './partial-tags-parser';
 
 const EMPTY_ELEMENTS = [
   'area',
@@ -23,10 +24,20 @@ export interface ParsedFullTags {
   operations: DOMOperation[];
 }
 
+export interface ParsedOpenPartialTag {
+  leadingOperations: DOMOperation[];
+  tagName: string;
+  content: string;
+}
+
 export type ParseResult =
   | {
       type: 'fullTags';
       value: ParsedFullTags;
+    }
+  | {
+      type: 'openPartialTag';
+      value: ParsedOpenPartialTag;
     }
   | {
       type: 'invalidFragment';
@@ -60,9 +71,12 @@ function getRemainingText(
   }
   let lastChild = ast.childNodes[ast.childNodes.length - 1];
   let elementLastChild = lastChild as parse5.DefaultTreeElement;
-  let sourceLocation = elementLastChild.sourceCodeLocation;
-  if (sourceLocation && sourceLocation.endOffset < fragment.length) {
-    return fragment.slice(sourceLocation.endOffset);
+  let sourceCodeLocation = elementLastChild.sourceCodeLocation;
+  if (sourceCodeLocation == null) {
+    throw new Error('Tree must contain source info');
+  }
+  if (sourceCodeLocation.endOffset < fragment.length) {
+    return fragment.slice(sourceCodeLocation.endOffset);
   }
   return '';
 }
@@ -195,9 +209,22 @@ export function parseFragment(fragment: string): ParseResult {
   // try to recover the closing tag.
   stripTrailingTextNodes(fragmentAst);
   operations.push(...getFragmentDOMOperations(fragmentAst));
-  remaining = getRemainingText(remaining, fragmentAst);
-  let endingClosing = parseClosingTags(remaining);
+  let remainingAfterFragmentParse = getRemainingText(remaining, fragmentAst);
+  let endingClosing = parseClosingTags(remainingAfterFragmentParse);
   operations.push(...getOperationsFromTags(endingClosing.tags));
+  // There might be the start of a tag like <input type=" lurking at the end
+  let openPartialTag = parseOpenPartialTag(remaining);
+  if (openPartialTag) {
+    return {
+      type: 'openPartialTag',
+      value: {
+        leadingOperations: operations,
+        tagName: openPartialTag.tagName,
+        content: openPartialTag.content,
+      },
+    };
+  }
+  // At this point we can probably trust that the content is invalid
   if (endingClosing.remaining.length > 0) {
     return { type: 'invalidFragment' };
   }
