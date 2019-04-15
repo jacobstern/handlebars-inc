@@ -2,23 +2,7 @@ import parse5 from 'parse5';
 import { DOMOperation, PropertyValuePair } from '../dom-operation';
 import { parseClosingTags, ClosingTagsSource } from './closing-tags-parser';
 import { parseOpenPartialTag } from './partial-tags-parser';
-
-const EMPTY_ELEMENTS = [
-  'area',
-  'base',
-  'br',
-  'col',
-  'embed',
-  'hr',
-  'img',
-  'input',
-  'link',
-  'meta',
-  'param',
-  'source',
-  'track',
-  'wbr',
-];
+import { isEmptyElement } from '../empty-elements';
 
 export interface ParsedFullTags {
   operations: DOMOperation[];
@@ -110,7 +94,15 @@ function getNodeDOMOperations(node: parse5.DefaultTreeNode): DOMOperation[] {
   } else if (!node.nodeName.startsWith('#')) {
     // Hash prefix is used for other "special" node types like comments
     let elementNode = node as parse5.DefaultTreeElement;
-    if (EMPTY_ELEMENTS.indexOf(elementNode.tagName) < 0) {
+    if (isEmptyElement(elementNode.tagName)) {
+      operations.push({
+        type: 'emptyElement',
+        value: {
+          propertyValuePairs: getPropertyValuePairs(elementNode.attrs),
+          tagName: elementNode.tagName,
+        },
+      });
+    } else {
       operations.push({
         type: 'elementOpen',
         value: {
@@ -132,14 +124,6 @@ function getNodeDOMOperations(node: parse5.DefaultTreeNode): DOMOperation[] {
           value: { tagName: elementNode.tagName },
         });
       }
-    } else {
-      operations.push({
-        type: 'emptyElement',
-        value: {
-          propertyValuePairs: getPropertyValuePairs(elementNode.attrs),
-          tagName: elementNode.tagName,
-        },
-      });
     }
   }
   return operations;
@@ -212,14 +196,17 @@ export function parseFragment(fragment: string): ParseResult {
   let remainingAfterFragmentParse = getRemainingText(remaining, fragmentAst);
   let endingClosing = parseClosingTags(remainingAfterFragmentParse);
   operations.push(...getOperationsFromTags(endingClosing.tags));
-  // There might be the start of a tag like <input type=" lurking at the end
+  // There might be the start of a tag like <input type=" lurking at the end.
+  // Include the text that was previously parsed by parse5 since the partial tag
+  // might not have been extracted by getRemainingText().
   let openPartialTag = parseOpenPartialTag(remaining);
   if (openPartialTag) {
+    let { tagName } = openPartialTag;
     return {
       type: 'openPartialTag',
       value: {
         leadingOperations: operations,
-        tagName: openPartialTag.tagName,
+        tagName,
         content: openPartialTag.content,
       },
     };

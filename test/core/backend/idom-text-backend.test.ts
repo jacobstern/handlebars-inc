@@ -15,8 +15,32 @@ test('can render a basic HTML fragment', () => {
     idom.text('Some content');
     idom.elementClose('div');
   });
-  let expected = normalizeHTMLFragment(
-    '<div class="content" id="root"><h1>Hello World</h1>Some content</div>'
-  );
+  // prettier-ignore
+  let expected = '<div class="content" id="root"><h1>Hello World</h1>Some content</div>'
   expect(normalizeHTMLFragment(result)).toBe(expected);
+});
+
+test('can render a HTML fragment with partial tags', () => {
+  let result = runIdomToText(idom => {
+    idom.elementOpen('div', generateElementKey());
+    idom.elementOpenStart('input', generateElementKey());
+    idom.attr('value', 'China');
+    idom.elementOpenEnd();
+    idom.elementClose('input');
+  });
+  let expected = '<div><input value="China">';
+  expect(result).toBe(expected);
+});
+
+test('renders partial tags for non-empty elements', () => {
+  let result = runIdomToText(idom => {
+    idom.elementOpen('div', generateElementKey());
+    idom.elementOpenStart('div', generateElementKey());
+    idom.attr('class', 'content');
+    idom.elementOpenEnd();
+    idom.text('Hello world!');
+    idom.elementClose('div');
+  });
+  let expected = '<div><div class="content">Hello world!</div>';
+  expect(result).toBe(expected);
 });

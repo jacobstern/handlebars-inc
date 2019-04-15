@@ -1,13 +1,25 @@
 import { IdomImplementation } from './idom-implementation';
+import { isEmptyElement } from '../empty-elements';
 
 export type IdomToTextCallback = (idom: IdomImplementation) => void;
 
 export function runIdomToText(callback: IdomToTextCallback): string {
   let buffer = '';
   callback({
+    elementOpenStart(name, _key, staticAttrs) {
+      let tagContents = generateTagContents(staticAttrs);
+      buffer += `<${name}${tagContents}`;
+    },
+    attr(name, value) {
+      buffer += generateTagContents([name, value]);
+    },
+    elementOpenEnd() {
+      buffer += '>';
+    },
     elementVoid(name, _key, staticAttrs, ...dynamicAttrs) {
       let tagContents = generateTagContents(staticAttrs, dynamicAttrs);
-      // HandlebarsIdom uses `elementVoid()` for self-closing tags
+      // HandlebarsIdom uses `elementVoid()` for self-closing tags (also
+      // referred to in the source as empty elements)
       buffer += `<${name}${tagContents}>`;
     },
     elementOpen(name, _key, staticAttrs, ...dynamicAttrs) {
@@ -15,7 +27,14 @@ export function runIdomToText(callback: IdomToTextCallback): string {
       buffer += `<${name}${tagContents}>`;
     },
     elementClose(name) {
-      buffer += `</${name}>`;
+      if (typeof name === 'function') {
+        throw new Error(
+          'Unexpected element constructor function in incremental-dom call'
+        );
+      }
+      if (!isEmptyElement(name)) {
+        buffer += `</${name}>`;
+      }
     },
     text(text) {
       buffer += text;

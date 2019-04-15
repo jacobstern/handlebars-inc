@@ -24,6 +24,7 @@ export function parseOpenPartialTag(
 export function parsePartialTagEnd(
   fragment: string
 ): PartialTagEnd | undefined {
+  // This is obviously simplistic but should work well enough for our use case
   let index = fragment.indexOf('>');
   if (index !== -1) {
     return {
