@@ -228,6 +228,56 @@ test('parses a partial fragment with nested tags', () => {
   ]);
 });
 
-test.todo('generates the correct operations for self closing tags');
+test('generates the correct operations for self closing tags', () => {
+  let result = parseFragment('<div><input type="text"></div>');
+  expect(result.type).toBe('fullTags');
+  expect(result.value.operations).toEqual([
+    {
+      type: 'elementOpen',
+      value: {
+        propertyValuePairs: [],
+        tagName: 'div',
+      },
+    },
+    {
+      type: 'emptyElement',
+      value: {
+        propertyValuePairs: [['type', 'text']],
+        tagName: 'input',
+      },
+    },
+    {
+      type: 'elementClose',
+      value: {
+        tagName: 'div',
+      },
+    },
+  ]);
+});
 
-test.todo('handles XML-style self closing tag');
+test('handles XML-style self closing tag', () => {
+  let result = parseFragment('<div><input type="text"/></div>');
+  expect(result.type).toBe('fullTags');
+  expect(result.value.operations).toEqual([
+    {
+      type: 'elementOpen',
+      value: {
+        propertyValuePairs: [],
+        tagName: 'div',
+      },
+    },
+    {
+      type: 'emptyElement',
+      value: {
+        propertyValuePairs: [['type', 'text']],
+        tagName: 'input',
+      },
+    },
+    {
+      type: 'elementClose',
+      value: {
+        tagName: 'div',
+      },
+    },
+  ]);
+});
