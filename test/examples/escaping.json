@@ -2,13 +2,13 @@
    "desc": "the compiler properly handles escaped and unescaped constructs, such as",
    "examples": [
       {
+         "backends": [
+            "text"
+         ],
          "data": {
             "content": "<h1>My Post</h1>"
          },
          "desc": "an unescaped HTML string when using the text backend",
-         "modes": [
-            "text"
-         ],
          "template": "<div class=\"content\">{{{content}}}</div>"
       },
       {

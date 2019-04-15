@@ -12,12 +12,12 @@
       test: 'skip',
     },
     {
-      desc: 'using #if to set attributes',
+      desc: 'using matching #if to set attributes',
       data: {
         isLoading: true,
       },
       template: importstr './hbs/attrs-if.hbs',
-      test: 'skip',
+      backends: ['text'],
     },
     {
       desc: 'using a negative #if to set attributes',

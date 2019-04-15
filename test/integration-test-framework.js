@@ -66,7 +66,7 @@ export function runIntegrationTests(configs) {
             template: hbs,
             expected,
             partials,
-            modes = ['text', 'idom'],
+            backends = ['text', 'idom'],
           } = example;
           if (expected == null) {
             expected = getExpectedFromHandlebars(hbs, example.data, partials);
@@ -82,14 +82,14 @@ export function runIntegrationTests(configs) {
             }
           }
 
-          if (modes.indexOf('text') >= 0) {
+          if (backends.indexOf('text') >= 0) {
             let template = HandlebarsIdom.compile(hbs);
             let text = template(example.data);
             let normalizedText = normalizeHTMLFragment(text);
             expect(normalizedText).toBe(expected);
           }
 
-          if (modes.indexOf('idom') >= 0) {
+          if (backends.indexOf('idom') >= 0) {
             let idomPrecompiled = HandlebarsIdom.precompile(hbs);
             let scriptPartials = '{\n';
             if (partials != null) {

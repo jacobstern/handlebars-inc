@@ -7,7 +7,7 @@
       data: {
         content: '<h1>My Post</h1>',
       },
-      modes: ['text'],
+      backends: ['text'],
     },
     {
       desc: 'element content with HTML-escaped characters',

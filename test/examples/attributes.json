@@ -12,12 +12,14 @@
          "test": "skip"
       },
       {
+         "backends": [
+            "text"
+         ],
          "data": {
             "isLoading": true
          },
-         "desc": "using #if to set attributes",
-         "template": "<button\n  class=\"button {{#if isLoading}}is-loading{{/if}}\"\n  {{#if isLoading}}disabled{{/if}}\n>\n  Click me!\n</button>\n",
-         "test": "skip"
+         "desc": "using matching #if to set attributes",
+         "template": "<button\n  class=\"button {{#if isLoading}}is-loading{{/if}}\"\n  {{#if isLoading}}disabled{{/if}}\n>\n  Click me!\n</button>\n"
       },
       {
          "data": {
