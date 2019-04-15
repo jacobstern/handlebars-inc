@@ -1,0 +1,31 @@
+{
+   "desc": "the compiler handles dynamic attribute values",
+   "examples": [
+      {
+         "data": {
+            "class": "button",
+            "content": "Hello button!",
+            "type": "submit"
+         },
+         "desc": "with values from the context",
+         "template": "<button class=\"{{class}}\" type=\"{{type}}\">{{content}}</button>",
+         "test": "skip"
+      },
+      {
+         "data": {
+            "isLoading": true
+         },
+         "desc": "using #if to set attributes",
+         "template": "<button\n  class=\"button {{#if isLoading}}is-loading{{/if}}\"\n  {{#if isLoading}}disabled{{/if}}\n>\n  Click me!\n</button>\n",
+         "test": "skip"
+      },
+      {
+         "data": {
+            "isLoading": false
+         },
+         "desc": "using a negative #if to set attributes",
+         "template": "<button\n  class=\"button {{#if isLoading}}is-loading{{/if}}\"\n  {{#if isLoading}}disabled{{/if}}\n>\n  Click me!\n</button>\n",
+         "test": "skip"
+      }
+   ]
+}
