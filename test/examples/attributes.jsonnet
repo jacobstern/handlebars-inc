@@ -25,5 +25,19 @@
       },
       template: importstr './hbs/attrs-if.hbs',
     },
+    {
+      desc: 'such as a more complicated example with attributes and nested tags',
+      data: {
+        isLoading: true,
+      },
+      template: importstr './hbs/attrs-nested-tags.hbs',
+    },
+    {
+      desc: 'setting attributes on a self-closing tag',
+      data: {
+        query: 'Vietnam',
+      },
+      template: importstr './hbs/attrs-self-closing.hbs',
+    },
   ],
 }

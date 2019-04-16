@@ -30,7 +30,7 @@ module.exports = env => {
       extensions: ['.ts', '.js'],
     },
     optimization: {
-      minimize: false,
+      minimize: isProd,
     },
     plugins,
   };

@@ -26,6 +26,20 @@
          },
          "desc": "using a negative #if to set attributes",
          "template": "<button\n  class=\"button {{#if isLoading}}is-loading{{/if}}\"\n  {{#if isLoading}}disabled{{/if}}\n>\n  Click me!\n</button>\n"
+      },
+      {
+         "data": {
+            "isLoading": true
+         },
+         "desc": "such as a more complicated example with attributes and nested tags",
+         "template": "<div class=\"control\">\n  <button\n    class=\"button {{#if isLoading}}is-loading{{/if}}\"\n    {{#if isLoading}}disabled{{/if}}\n  >\n    Click me!\n  </button>\n</div>\n<h1>Hello world!</h1>"
+      },
+      {
+         "data": {
+            "query": "Vietnam"
+         },
+         "desc": "setting attributes on a self-closing tag",
+         "template": "<div class=\"control\">\n  <input type=\"text\" value=\"{{query}}\">\n</div>\n<h1>Hello world!</h1>"
       }
    ]
 }
