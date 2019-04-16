@@ -76,6 +76,13 @@ export function runIntegrationTests(configs) {
             // eslint-disable-next-line no-console
             console.debug(`let expected = \`${expected}\`;`);
           }
+          if (example.debugPrintPrecompiled) {
+            // eslint-disable-next-line no-console
+            console.debug(
+              `let precompiled = \`${HandlebarsIdom.precompile(hbs)}\`;`
+            );
+          }
+
           if (partials != null) {
             for (let key in partials) {
               HandlebarsIdom.registerPartial(key, partials[key]);

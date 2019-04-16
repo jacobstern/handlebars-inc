@@ -328,7 +328,49 @@ test('parses an open partial tag after an unmatched closing tag', () => {
 test('parses the beginning of a single tag', () => {
   let result = parseFragment('<button class="');
   expect(result.type).toBe('openPartialTag');
-  expect(result.value.leadingOperations).toHaveLength(0);
-  expect(result.value.tagName).toBe('button');
-  expect(result.value.content).toBe(' class="');
+  expect(result.value).toEqual({
+    leadingOperations: [],
+    tagName: 'button',
+    content: ' class="',
+  });
+});
+
+test('parses a closing tag in between two valid fragments', () => {
+  // prettier-ignore
+  let result = parseFragment('<div>Hello world!</div></form><input type="text">');
+  expect(result.type).toBe('fullTags');
+  expect(result.value.operations).toEqual([
+    {
+      type: 'elementOpen',
+      value: {
+        tagName: 'div',
+        propertyValuePairs: [],
+      },
+    },
+    {
+      type: 'text',
+      value: {
+        text: 'Hello world!',
+      },
+    },
+    {
+      type: 'elementClose',
+      value: {
+        tagName: 'div',
+      },
+    },
+    {
+      type: 'elementClose',
+      value: {
+        tagName: 'form',
+      },
+    },
+    {
+      type: 'emptyElement',
+      value: {
+        tagName: 'input',
+        propertyValuePairs: [['type', 'text']],
+      },
+    },
+  ]);
 });

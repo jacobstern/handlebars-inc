@@ -39,5 +39,12 @@
       },
       template: importstr './hbs/attrs-self-closing.hbs',
     },
+    {
+      desc: 'setting input attributes in a larger fragment',
+      data: {
+        query: 'Vietnam',
+      },
+      template: importstr './hbs/attrs-search.hbs',
+    },
   ],
 }

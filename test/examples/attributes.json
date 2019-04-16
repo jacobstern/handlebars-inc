@@ -40,6 +40,13 @@
          },
          "desc": "setting attributes on a self-closing tag",
          "template": "<div class=\"control\">\n  <input type=\"text\" value=\"{{query}}\">\n</div>\n<h1>Hello world!</h1>"
+      },
+      {
+         "data": {
+            "query": "Vietnam"
+         },
+         "desc": "setting input attributes in a larger fragment",
+         "template": "<section class=\"section\">\n  <div class=\"container\" id=\"search-container\">\n    <h1 class=\"title\">Search Wikipedia Articles</h1>\n    <form class=\"search-form\" method=\"GET\">\n      <div class=\"field has-addons\">\n        <div class=\"control\">\n          <input id=\"search-input\" name=\"query\" class=\"input\" type=\"text\" value=\"{{query}}\">\n        </div>\n        <div class=\"control\">\n          <button id=\"search-button\" class=\"button is-info\">Search</button>\n        </div>\n      </div>\n    </form>\n    <div class=\"content\">\n      Some content...\n    </div>\n  </div>\n</section>"
       }
    ]
 }
