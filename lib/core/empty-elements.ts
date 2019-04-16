@@ -15,8 +15,13 @@ const EMPTY_ELEMENTS = [
   'wbr',
 ];
 
-const EMPTY_ELEMENTS_SET = new Set(EMPTY_ELEMENTS);
+// Don't want to require a Set() polyfill
+const EMPTY_ELEMENTS_OBJ: { [key: string]: boolean | undefined } = {};
 
-export function isEmptyElement(tagName: string) {
-  return EMPTY_ELEMENTS_SET.has(tagName);
+for (let element of EMPTY_ELEMENTS) {
+  EMPTY_ELEMENTS_OBJ[element] = true;
+}
+
+export function isEmptyElement(tagName: string): boolean {
+  return Boolean(EMPTY_ELEMENTS_OBJ[tagName]);
 }
