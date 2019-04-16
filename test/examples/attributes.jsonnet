@@ -17,7 +17,6 @@
         isLoading: true,
       },
       template: importstr './hbs/attrs-if.hbs',
-      test: 'skip',
     },
     {
       desc: 'using a negative #if to set attributes',
@@ -25,7 +24,6 @@
         isLoading: false,
       },
       template: importstr './hbs/attrs-if.hbs',
-      test: 'skip',
     },
   ],
 }

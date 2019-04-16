@@ -83,7 +83,6 @@ export function runIntegrationTests(configs) {
           }
 
           if (backends.indexOf('text') >= 0) {
-            console.log(HandlebarsIdom.precompile(hbs));
             let template = HandlebarsIdom.compile(hbs);
             let text = template(example.data);
             let normalizedText = normalizeHTMLFragment(text);

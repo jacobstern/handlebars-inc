@@ -60,8 +60,13 @@ function generateTagContents(staticAttrs?: string[], dynamicAttrs?: string[]) {
     previousAttribute = value;
   });
   let tagContents = '';
-  attributePairs.forEach(([key, value]) => {
-    tagContents += ` ${key}="${value}"`;
-  });
+  for (let [key, value] of attributePairs) {
+    if (value) {
+      tagContents += ` ${key}="${value}"`;
+    } else {
+      // Empty attribute
+      tagContents += ` ${key}`;
+    }
+  }
   return tagContents;
 }
