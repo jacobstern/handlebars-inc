@@ -23,5 +23,8 @@ for (let element of EMPTY_ELEMENTS) {
 }
 
 export function isEmptyElement(tagName: string): boolean {
-  return Boolean(EMPTY_ELEMENTS_OBJ[tagName]);
+  return (
+    EMPTY_ELEMENTS_OBJ.hasOwnProperty(tagName) &&
+    Boolean(EMPTY_ELEMENTS_OBJ[tagName])
+  );
 }
