@@ -2,7 +2,11 @@ import parse5 from 'parse5';
 import { DOMOperation, PropertyValuePair } from '../dom-operation';
 import { parseClosingTags, ClosingTagsSource } from './closing-tags-parser';
 import { parseOpenPartialTag } from './partial-tags-parser';
+import * as partial from './partial-tags-parser';
 import { isEmptyElement } from '../empty-elements';
+export { parsePartialTagEnd } from './partial-tags-parser';
+
+export type PartialTagEnd = partial.PartialTagEnd;
 
 export interface ParsedFullTags {
   operations: DOMOperation[];
@@ -184,10 +188,6 @@ export function parseFragment(fragment: string): ParseResult {
   let remaining = initialClosing.remaining;
   let ast = parse5.parseFragment(remaining, { sourceCodeLocationInfo: true });
   let fragmentAst = ast as parse5.DefaultTreeDocumentFragment;
-  let leadingText = getUnparsedLeadingText(remaining, fragmentAst);
-  if (leadingText.length > 0) {
-    return { type: 'invalidFragment' };
-  }
   // Sometimes if there are unmatched closing tags in the fragment, parse5 will
   // give us text nodes that extend past the closing tag. We need to rewind and
   // try to recover the closing tag.
@@ -210,6 +210,10 @@ export function parseFragment(fragment: string): ParseResult {
         content: openPartialTag.content,
       },
     };
+  }
+  let leadingText = getUnparsedLeadingText(remaining, fragmentAst);
+  if (leadingText.length > 0) {
+    return { type: 'invalidFragment' };
   }
   // At this point we can probably trust that the content is invalid
   if (endingClosing.remaining.length > 0) {

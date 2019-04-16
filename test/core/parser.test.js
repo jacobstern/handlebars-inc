@@ -182,11 +182,6 @@ test('parses a fragment with nested tags', () => {
   ]);
 });
 
-test('fails to parse a partial opening <script> tag', () => {
-  let result = parseFragment('<script src="');
-  expect(result.type).toBe('invalidFragment');
-});
-
 test('parses a partial fragment with nested tags', () => {
   // prettier-ignore
   let result = parseFragment('<div class="foo"><h1>Hello</h1><div class="content">');
@@ -328,4 +323,12 @@ test('parses an open partial tag after an unmatched closing tag', () => {
     tagName: 'input',
     content: ' type="',
   });
+});
+
+test('parses the beginning of a single tag', () => {
+  let result = parseFragment('<button class="');
+  expect(result.type).toBe('openPartialTag');
+  expect(result.value.leadingOperations).toHaveLength(0);
+  expect(result.value.tagName).toBe('button');
+  expect(result.value.content).toBe(' class="');
 });

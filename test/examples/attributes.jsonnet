@@ -9,7 +9,7 @@
         content: 'Hello button!',
       },
       template: importstr './hbs/attrs-from-context.hbs',
-      test: 'skip',
+      backends: ['text'],
     },
     {
       desc: 'using matching #if to set attributes',
@@ -17,7 +17,7 @@
         isLoading: true,
       },
       template: importstr './hbs/attrs-if.hbs',
-      backends: ['text'],
+      test: 'skip',
     },
     {
       desc: 'using a negative #if to set attributes',

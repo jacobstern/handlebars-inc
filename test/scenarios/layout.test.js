@@ -1,7 +1,7 @@
 import handlebars from '../../lib';
 import { readExamplesFile } from '../test-helpers';
 
-test('can add content to an app layout', async () => {
+test.skip('can add content to an app layout', async () => {
   let layout = await readExamplesFile('hbs/layout.hbs');
   let page = await readExamplesFile('hbs/page.hbs');
   let layoutTemplate = handlebars.compile(layout);
