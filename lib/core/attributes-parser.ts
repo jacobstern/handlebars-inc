@@ -1,9 +1,9 @@
 export type KeyValuePair = [string, string | undefined];
 
-const QUOTED_ATTRIBUTE_REGEX = /[\s^]([a-zA-Z]+)\s*?=\s*?"(.*?)"/g;
-const SINGLE_ATTRIBUTE_REGEX = /[\s^]([a-zA-Z]+)\s*?=\s*?'(.*?)'/g;
-const UNQUOTED_ATTRIBUTE_REGEX = /[\s^]([a-zA-Z]+)\s*?=\s*?(\w+)[\s$]/g;
-const EMPTY_ATTRIBUTE_REGEX = /[\s^]([a-zA-Z]+)[\s$]/g;
+const QUOTED_ATTRIBUTE_REGEX = /\s([a-zA-Z\-\.\:\:_]+)\s*?=\s*?"(.*?)"/g;
+const SINGLE_ATTRIBUTE_REGEX = /\s([a-zA-Z\-\.\:_]+)\s*?=\s*?'(.*?)'/g;
+const UNQUOTED_ATTRIBUTE_REGEX = /\s([a-zA-Z\-\.\:_]+)\s*?=\s*?(\w+)(?:\s|$)/g;
+const EMPTY_ATTRIBUTE_REGEX = /\s([a-zA-Z\-\.\:_]+)(?:\s|$)/g;
 
 function getExhaustiveMatches(regex: RegExp, toMatch: string): string[][] {
   let allMatches: string[][] = [];
