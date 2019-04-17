@@ -1,4 +1,4 @@
-import { parseClosingTags } from '../../../lib/core/parser/closing-tags-parser';
+import { parseClosingTags } from '../../../lib/handlebars-inc/core/parser/closing-tags-parser';
 
 test('recognizes a closing tag and subsequent text', () => {
   let result = parseClosingTags('</div>Hello');

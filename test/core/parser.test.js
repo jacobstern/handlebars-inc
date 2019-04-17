@@ -1,4 +1,4 @@
-import { parseFragment } from '../../lib/core/parser';
+import { parseFragment } from '../../lib/handlebars-inc/core/parser';
 
 test('returns empty for empty string', () => {
   const result = parseFragment('');

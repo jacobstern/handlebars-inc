@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["esnext", "dom"],
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -15,5 +15,6 @@
     "noEmit": true,
     "jsx": "preserve"
   },
+  "exclude": ["test/*-watch-plugin.js"],
   "include": ["lib", "test"]
 }

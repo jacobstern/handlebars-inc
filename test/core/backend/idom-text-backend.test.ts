@@ -1,4 +1,4 @@
-import { runIdomToText } from '../../../lib/core/backend/idom-text-backend';
+import { runIdomToText } from '../../../lib/handlebars-inc/core/backend/idom-text-backend';
 import { generateElementKey, normalizeHTMLFragment } from '../../test-helpers';
 
 test('can render a basic HTML fragment', () => {

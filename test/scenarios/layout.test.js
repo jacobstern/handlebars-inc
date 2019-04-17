@@ -1,4 +1,4 @@
-import handlebars from '../../lib';
+import handlebars from '../../lib/';
 import { readExamplesFile } from '../test-helpers';
 
 test('can add content to an app layout', async () => {

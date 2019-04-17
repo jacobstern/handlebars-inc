@@ -1,4 +1,4 @@
-import { parseAttributes } from '../../lib/core/attributes-parser';
+import { parseAttributes } from '../../lib/handlebars-inc/core/attributes-parser';
 
 test('parses a potentially ambiguous double quoted attribute', () => {
   const result = parseAttributes(' data-info=" nesting=\'single quotes\'"');

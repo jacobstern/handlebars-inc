@@ -1,7 +1,7 @@
 import {
   parseOpenPartialTag,
   parsePartialTagEnd,
-} from '../../../lib/core/parser/partial-tags-parser';
+} from '../../../lib/handlebars-inc/core/parser/partial-tags-parser';
 
 test('returns a negative result for open partial tag in a plain string', () => {
   let result = parseOpenPartialTag('Hello world');
