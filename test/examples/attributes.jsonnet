@@ -46,5 +46,13 @@
       },
       template: importstr './hbs/attrs-search.hbs',
     },
+    {
+      desc: 'setting an input attribute that should be escaped',
+      data: {
+        query: '<3',
+      },
+      template: importstr './hbs/attrs-search.hbs',
+    },
+
   ],
 }
