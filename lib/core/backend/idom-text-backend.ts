@@ -18,7 +18,7 @@ export function runIdomToText(callback: IdomToTextCallback): string {
     },
     elementVoid(name, _key, staticAttrs, ...dynamicAttrs) {
       let tagContents = generateTagContents(staticAttrs, dynamicAttrs);
-      // HandlebarsIdom uses `elementVoid()` for self-closing tags (also
+      // HandlebarsInc uses `elementVoid()` for self-closing tags (also
       // referred to in the source as empty elements)
       buffer += `<${name}${tagContents}>`;
     },
