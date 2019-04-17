@@ -7,7 +7,10 @@ import { JSDOM } from 'jsdom';
 import { normalizeHTMLFragment } from './test-helpers';
 
 function createRuntimeScript() {
-  let idomBuildPath = path.join(__dirname, '../dist/runtime.js');
+  let idomBuildPath = path.join(
+    __dirname,
+    '../dist/handlebars-inc-runtime.development.js'
+  );
   let source = fs.readFileSync(idomBuildPath, 'utf8');
   return new Script(source);
 }

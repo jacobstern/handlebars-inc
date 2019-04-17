@@ -10,7 +10,7 @@
     "build": "run-s typecheck build:babel",
     "lint": "eslint .",
     "runtime": "run-s runtime:clean runtime:build",
-    "runtime:clean": "rimraf dist/runtime.js",
+    "runtime:clean": "rimraf dist/handlebars-inc-runtime*.js",
     "runtime:build": "run-p typecheck runtime:webpack",
     "runtime:webpack": "webpack",
     "runtime:development": "webpack --env development",
