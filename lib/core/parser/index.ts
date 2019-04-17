@@ -31,50 +31,32 @@ export type ParseResult =
       type: 'invalidFragment';
     };
 
-function getUnparsedLeadingText(
-  fragment: string,
-  ast: parse5.DefaultTreeDocumentFragment
-): string {
-  if (ast.childNodes.length === 0) {
-    return fragment;
-  }
-  let firstChild = ast.childNodes[0];
-  let elementFirstChild = firstChild as parse5.DefaultTreeElement;
-  let sourceCodeLocation = elementFirstChild.sourceCodeLocation;
-  if (sourceCodeLocation == null) {
-    throw new Error('Tree must contain source info');
-  }
-  if (sourceCodeLocation.startOffset > 0) {
-    return fragment.slice(0, sourceCodeLocation.startOffset);
-  }
-  return '';
+interface HasLocation {
+  sourceCodeLocation?: parse5.Location;
 }
 
-function getRemainingText(
-  fragment: string,
-  ast: parse5.DefaultTreeDocumentFragment
-): string {
-  if (ast.childNodes.length === 0) {
-    return fragment;
-  }
-  let lastChild = ast.childNodes[ast.childNodes.length - 1];
-  let elementLastChild = lastChild as parse5.DefaultTreeElement;
-  let sourceCodeLocation = elementLastChild.sourceCodeLocation;
-  if (sourceCodeLocation == null) {
-    throw new Error('Tree must contain source info');
-  }
-  if (sourceCodeLocation.endOffset < fragment.length) {
-    return fragment.slice(sourceCodeLocation.endOffset);
-  }
-  return '';
+interface ElementLocation extends parse5.Location {
+  startTag: parse5.StartTagLocation;
+  endTag?: parse5.Location;
 }
 
-function stripTrailingTextNodes(ast: parse5.DefaultTreeDocumentFragment) {
-  let lastChild = ast.childNodes[ast.childNodes.length - 1];
-  while (lastChild && lastChild.nodeName === '#text') {
-    ast.childNodes.pop();
-    lastChild = ast.childNodes[ast.childNodes.length - 1];
+function demandLocation(node: parse5.DefaultTreeNode): parse5.Location {
+  if (node.hasOwnProperty('sourceCodeLocation')) {
+    const withSource = node as HasLocation;
+    const sourceCodeLocation = withSource.sourceCodeLocation;
+    if (sourceCodeLocation) {
+      return sourceCodeLocation;
+    }
   }
+  throw new Error('Tree must contain source info');
+}
+
+function demandElementLocation(node: parse5.DefaultTreeNode): ElementLocation {
+  const sourceCodeLocation = demandLocation(node);
+  if (sourceCodeLocation.hasOwnProperty('startTag')) {
+    return sourceCodeLocation as ElementLocation;
+  }
+  throw new Error('Expected source code info to have startTag');
 }
 
 function getPropertyValuePairs(
@@ -85,19 +67,55 @@ function getPropertyValuePairs(
   );
 }
 
-function getNodeDOMOperations(node: parse5.DefaultTreeNode): DOMOperation[] {
-  let operations: DOMOperation[] = [];
+const HTML_RESERVED_CHARACTERS_REGEX = /['"&<>]/g;
+
+interface ValidOperations {
+  operations: DOMOperation[];
+  endOffset: number;
+}
+
+function getNodeDOMOperations(
+  node: parse5.DefaultTreeNode,
+  fragment: string,
+  startOffset: number
+): ValidOperations | undefined {
+  const operations: DOMOperation[] = [];
+  const sourceLocation = demandLocation(node);
+  if (sourceLocation.startOffset > startOffset) {
+    // Handle leading garbage
+    const garbage = fragment.substring(startOffset, sourceLocation.startOffset);
+    const closingTags = parseClosingTags(garbage);
+    if (closingTags.remaining) {
+      return undefined;
+    }
+    operations.push(...getOperationsFromClosingTags(closingTags.tags));
+  }
   if (node.nodeName === '#text') {
-    let textNode = node as parse5.DefaultTreeTextNode;
-    operations.push({
-      type: 'text',
-      value: {
-        text: textNode.value,
-      },
-    });
+    const textNode = node as parse5.DefaultTreeTextNode;
+    const textSource = fragment.substring(
+      sourceLocation.startOffset,
+      sourceLocation.endOffset
+    );
+    if (textSource.match(HTML_RESERVED_CHARACTERS_REGEX)) {
+      // parse5 will ignore unmatched closing tags inside a text node
+      const closingTags = parseClosingTags(textSource);
+      operations.push(...getOperationsFromClosingTags(closingTags.tags));
+      return {
+        operations,
+        endOffset: sourceLocation.endOffset - closingTags.remaining.length,
+      };
+    } else {
+      operations.push({
+        type: 'text',
+        value: {
+          text: textNode.value,
+        },
+      });
+    }
   } else if (!node.nodeName.startsWith('#')) {
     // Hash prefix is used for other "special" node types like comments
-    let elementNode = node as parse5.DefaultTreeElement;
+    const elementNode = node as parse5.DefaultTreeElement;
+    const elementLocation = demandElementLocation(node);
     if (isEmptyElement(elementNode.tagName)) {
       operations.push({
         type: 'emptyElement',
@@ -114,37 +132,94 @@ function getNodeDOMOperations(node: parse5.DefaultTreeNode): DOMOperation[] {
           tagName: elementNode.tagName,
         },
       });
-      elementNode.childNodes.forEach(node => {
-        operations.push(...getNodeDOMOperations(node));
-      });
-      let sourceCodeLocation = elementNode.sourceCodeLocation;
-      if (sourceCodeLocation == null) {
-        throw new Error('Tree must contain source info');
+      const contentsStartOffset = elementLocation.startTag.endOffset;
+      let offset = contentsStartOffset;
+      for (let node of elementNode.childNodes) {
+        const intermediateResult = getNodeDOMOperations(node, fragment, offset);
+        if (intermediateResult) {
+          operations.push(...intermediateResult.operations);
+          offset = intermediateResult.endOffset;
+        } else {
+          // Parse failure
+          return intermediateResult;
+        }
       }
-      let hasClosingTag = Boolean(sourceCodeLocation.endTag);
-      if (hasClosingTag) {
+      const endTagLocation = elementLocation.endTag;
+      if (endTagLocation) {
+        const contentsEndOffset = endTagLocation.startOffset;
+        if (offset < contentsEndOffset) {
+          // Garbage inside of tags
+          const remaining = fragment.substring(offset, contentsEndOffset);
+          const closingTags = parseClosingTags(remaining);
+          if (closingTags.remaining) {
+            return undefined;
+          } else {
+            operations.push(...getOperationsFromClosingTags(closingTags.tags));
+          }
+        }
         operations.push({
           type: 'elementClose',
           value: { tagName: elementNode.tagName },
         });
+      } else {
+        // Can't trust sourceLocation.endOffset, there may be trailing garbage
+        // that is nonetheless included in the source range
+        return {
+          operations,
+          endOffset: offset,
+        };
       }
     }
   }
-  return operations;
+  return {
+    operations,
+    endOffset: sourceLocation.endOffset,
+  };
 }
 
-function getFragmentDOMOperations(
-  ast: parse5.DefaultTreeDocumentFragment
+function parseFromAST(
+  ast: parse5.DefaultTreeDocumentFragment,
+  fragment: string
+): ParseResult {
+  const operations: DOMOperation[] = [];
+  let offset = 0;
+  for (let child of ast.childNodes) {
+    const intermediateResult = getNodeDOMOperations(
+      child as parse5.DefaultTreeNode,
+      fragment,
+      offset
+    );
+    if (intermediateResult) {
+      operations.push(...intermediateResult.operations);
+      offset = intermediateResult.endOffset;
+    } else {
+      // Parse failed
+      return { type: 'invalidFragment' };
+    }
+  }
+  const remaining = fragment.substring(offset);
+  const closingTags = parseClosingTags(remaining);
+  operations.push(...getOperationsFromClosingTags(closingTags.tags));
+  if (closingTags.remaining) {
+    const partialTag = parseOpenPartialTag(closingTags.remaining);
+    if (partialTag) {
+      return {
+        type: 'openPartialTag',
+        value: {
+          leadingOperations: operations,
+          tagName: partialTag.tagName,
+          content: partialTag.content,
+        },
+      };
+    }
+    return { type: 'invalidFragment' };
+  }
+  return { type: 'fullTags', value: { operations } };
+}
+
+function getOperationsFromClosingTags(
+  tags: ClosingTagsSource[]
 ): DOMOperation[] {
-  let operations: DOMOperation[] = [];
-  ast.childNodes.forEach(child => {
-    let childNode = child as parse5.DefaultTreeNode;
-    operations.push(...getNodeDOMOperations(childNode));
-  });
-  return operations;
-}
-
-function getOperationsFromTags(tags: ClosingTagsSource[]): DOMOperation[] {
   return tags.map(
     (tag): DOMOperation => {
       switch (tag.type) {
@@ -179,45 +254,6 @@ export function parseFragment(fragment: string): ParseResult {
       value: { operations: [{ type: 'text', value: { text: fragment } }] },
     };
   }
-  let operations: DOMOperation[] = [];
-  // There may be unmatched closing tags at either the beginning or very end of
-  // a valid fragment.
-  // For example: '</div><p>...</p></div>'.
-  let initialClosing = parseClosingTags(fragment);
-  operations.push(...getOperationsFromTags(initialClosing.tags));
-  let remaining = initialClosing.remaining;
-  let ast = parse5.parseFragment(remaining, { sourceCodeLocationInfo: true });
-  let fragmentAst = ast as parse5.DefaultTreeDocumentFragment;
-  // Sometimes if there are unmatched closing tags in the fragment, parse5 will
-  // give us text nodes that extend past the closing tag. We need to rewind and
-  // try to recover the closing tag.
-  stripTrailingTextNodes(fragmentAst);
-  operations.push(...getFragmentDOMOperations(fragmentAst));
-  let remainingAfterFragmentParse = getRemainingText(remaining, fragmentAst);
-  let endingClosing = parseClosingTags(remainingAfterFragmentParse);
-  operations.push(...getOperationsFromTags(endingClosing.tags));
-  // There might be the start of a tag like <input type=" lurking at the end.
-  // Include the text that was previously parsed by parse5 since the partial tag
-  // might not have been extracted by getRemainingText().
-  let openPartialTag = parseOpenPartialTag(remaining);
-  if (openPartialTag) {
-    let { tagName } = openPartialTag;
-    return {
-      type: 'openPartialTag',
-      value: {
-        leadingOperations: operations,
-        tagName,
-        content: openPartialTag.content,
-      },
-    };
-  }
-  let leadingText = getUnparsedLeadingText(remaining, fragmentAst);
-  if (leadingText.length > 0) {
-    return { type: 'invalidFragment' };
-  }
-  // At this point we can probably trust that the content is invalid
-  if (endingClosing.remaining.length > 0) {
-    return { type: 'invalidFragment' };
-  }
-  return { type: 'fullTags', value: { operations } };
+  const ast = parse5.parseFragment(fragment, { sourceCodeLocationInfo: true });
+  return parseFromAST(ast as parse5.DefaultTreeDocumentFragment, fragment);
 }

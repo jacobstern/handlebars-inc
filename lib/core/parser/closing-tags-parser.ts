@@ -17,7 +17,7 @@ export interface ClosingTagsParseResult {
 
 const CLOSING_TAG_REGEX = /^<\/([A-Za-z0-9]+)>/;
 
-const INTERSTITIAL_TEXT_REGEX = /^[^<]+/;
+const INTERSTITIAL_TEXT_REGEX = /^[^<>]+/;
 
 export function parseClosingTags(fragment: string): ClosingTagsParseResult {
   let currentMatch: [ClosingTagsSource, string] | undefined; // [tag, remaining]
@@ -26,13 +26,13 @@ export function parseClosingTags(fragment: string): ClosingTagsParseResult {
     let [match, tagName] = result;
     currentMatch = [
       { type: 'closingTag', value: { tagName } },
-      fragment.substr(match.length)
+      fragment.substr(match.length),
     ];
   } else if ((result = fragment.match(INTERSTITIAL_TEXT_REGEX))) {
     let [match] = result;
     currentMatch = [
       { type: 'closingTagsInterstitialText', value: { text: match } },
-      fragment.substr(match.length)
+      fragment.substr(match.length),
     ];
   }
   if (currentMatch) {
@@ -40,7 +40,7 @@ export function parseClosingTags(fragment: string): ClosingTagsParseResult {
     let rest = parseClosingTags(remaining);
     return {
       tags: [tag, ...rest.tags],
-      remaining: rest.remaining
+      remaining: rest.remaining,
     };
   }
   // We are either at the end of the string, or beginning of an opening tag

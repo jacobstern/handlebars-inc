@@ -8,7 +8,7 @@ export interface PartialTagEnd {
   remaining: string;
 }
 
-const OPEN_PARTIAL_TAG_REGEX = /<([a-zA-Z]+)(\s+[^>]*)$/;
+const OPEN_PARTIAL_TAG_REGEX = /^<([a-zA-Z]+)(\s+[^>]*)$/;
 
 export function parseOpenPartialTag(
   fragment: string
