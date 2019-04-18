@@ -39,3 +39,9 @@ code path that targets Incremental DOM rather than always supporting both text a
 
 The project is very new and untested, and not ready for production use. Basic Handlebars functionality is covered in the
 test suite.
+
+## Major Backlog Items
+
+- [ ] Needs proper documentation #7
+- [ ] Missing TypeScript type definitions #6
+- [ ] Custom helper API unexplored, underdeveloped #8
