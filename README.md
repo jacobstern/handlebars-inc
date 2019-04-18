@@ -42,6 +42,6 @@ test suite.
 
 ## Major Backlog Items
 
-- [ ] Needs proper documentation #7
-- [ ] Missing TypeScript type definitions #6
-- [ ] Custom helper API unexplored, underdeveloped #8
+- [ ] Needs proper documentation [#7](https://github.com/jacobstern/handlebars-inc/issues/7)
+- [ ] Missing TypeScript type definitions [#6](https://github.com/jacobstern/handlebars-inc/issues/6)
+- [ ] Custom helper API unexplored, underdeveloped [#8](https://github.com/jacobstern/handlebars-inc/issues/8)
