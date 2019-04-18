@@ -117,6 +117,22 @@
          },
          "desc": "with a with block helper",
          "template": "<div class=\"entry\">\n  <h1>{{title}}</h1>\n\n  {{#with author}}\n  <h2>By {{firstName}} {{lastName}}</h2>\n  {{/with}}\n</div>"
+      },
+      {
+         "data": {
+            "bar": [
+               "1",
+               "2",
+               "3"
+            ],
+            "foo": [
+               "a",
+               "b",
+               "c"
+            ]
+         },
+         "desc": "with a lookup helper",
+         "template": "{{#each bar}}\n  {{lookup ../foo @index}}\n{{/each}}"
       }
    ]
 }

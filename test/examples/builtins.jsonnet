@@ -106,5 +106,13 @@
       },
       template: importstr './hbs/with.hbs',
     },
+    {
+      desc: 'with a lookup helper',
+      data: {
+        foo: ['a', 'b', 'c'],
+        bar: ['1', '2', '3'],
+      },
+      template: importstr './hbs/lookup.hbs',
+    },
   ],
 }
