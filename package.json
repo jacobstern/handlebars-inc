@@ -65,5 +65,13 @@
     "incremental-dom": "^0.6.0",
     "parse5": "^5.1.0",
     "shortid": "^2.2.14"
-  }
+  },
+  "keywords": [
+    "handlebars",
+    "mustache",
+    "incremental-dom",
+    "template",
+    "html"
+  ],
+  "repository": "github:jacobstern/handlebars-inc"
 }
