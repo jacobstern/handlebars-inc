@@ -3,6 +3,9 @@
   "version": "0.0.2",
   "description": "",
   "main": "dist/cjs/index.js",
+  "directories": {
+    "lib": "dist/cjs/"
+  },
   "scripts": {
     "clean": "rimraf dist/",
     "prebuild": "npm run clean",
