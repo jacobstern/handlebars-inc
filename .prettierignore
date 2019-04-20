@@ -2,8 +2,8 @@ dist/
 vendor/
 
 # Forked source files
-lib/helpers/each.js
-lib/compiler/javascript-compiler.js
-lib/runtime.js
+lib/handlebars-inc/helpers/each.js
+lib/handlebars-inc/compiler/javascript-compiler.js
+lib/handlebars-inc/runtime.js
 
 test/examples/html/
