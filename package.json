@@ -1,6 +1,6 @@
 {
   "name": "handlebars-inc",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Render isomorphic Handlebars templates using incremental-dom on the client",
   "main": "dist/cjs/index.js",
   "directories": {
