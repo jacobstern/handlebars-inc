@@ -58,6 +58,7 @@ export function runIntegrationTests(configs) {
   configs.forEach(config => {
     describe(config.desc, () => {
       config.examples.forEach(example => {
+        const instance = HandlebarsInc.create();
         let testFn = test;
         if (example.test === 'skip') {
           testFn = test.skip;
@@ -81,30 +82,28 @@ export function runIntegrationTests(configs) {
           }
           if (example.debugPrintPrecompiled) {
             // eslint-disable-next-line no-console
-            console.debug(
-              `let precompiled = \`${HandlebarsInc.precompile(hbs)}\`;`
-            );
+            console.debug(`let precompiled = \`${instance.precompile(hbs)}\`;`);
           }
 
           if (partials != null) {
             for (let key in partials) {
-              HandlebarsInc.registerPartial(key, partials[key]);
+              instance.registerPartial(key, partials[key]);
             }
           }
 
           if (backends.indexOf('text') >= 0) {
-            let template = HandlebarsInc.compile(hbs);
+            let template = instance.compile(hbs);
             let text = template(example.data);
             let normalizedText = normalizeHTMLFragment(text);
             expect(normalizedText).toBe(expected);
           }
 
           if (backends.indexOf('idom') >= 0) {
-            let idomPrecompiled = HandlebarsInc.precompile(hbs);
+            let idomPrecompiled = instance.precompile(hbs);
             let scriptPartials = '{\n';
             if (partials != null) {
               for (let key in partials) {
-                let precompiled = HandlebarsInc.precompile(partials[key]);
+                let precompiled = instance.precompile(partials[key]);
                 scriptPartials += `${key}: HandlebarsInc.template(${precompiled}),\n`;
               }
             }
@@ -120,10 +119,6 @@ export function runIntegrationTests(configs) {
             let mainDiv = dom.window.document.getElementById('main');
             let normalizedIdom = normalizeHTMLFragment(mainDiv.innerHTML);
             expect(normalizedIdom).toBe(expected);
-          }
-
-          for (let key in partials) {
-            HandlebarsInc.unregisterPartial(key);
           }
         });
       });
