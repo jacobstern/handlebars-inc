@@ -15,29 +15,40 @@ export function runIdomToText(callback: IdomToTextCallback): string {
     },
     elementOpenEnd() {
       buffer += '>';
+      return null;
     },
     elementVoid(name, _key, staticAttrs, ...dynamicAttrs) {
       let tagContents = generateTagContents(staticAttrs, dynamicAttrs);
       // HandlebarsInc uses `elementVoid()` for self-closing tags (also
       // referred to in the source as empty elements)
       buffer += `<${name}${tagContents}>`;
+      return null;
     },
     elementOpen(name, _key, staticAttrs, ...dynamicAttrs) {
       let tagContents = generateTagContents(staticAttrs, dynamicAttrs);
       buffer += `<${name}${tagContents}>`;
+      return null;
     },
     elementClose(name) {
-      if (typeof name === 'function') {
-        throw new Error(
-          'Unexpected element constructor function in incremental-dom call'
-        );
-      }
-      if (!isEmptyElement(name)) {
+      if (typeof name === 'string' && !isEmptyElement(name)) {
         buffer += `</${name}>`;
       }
+      return null;
     },
     text(text) {
       buffer += text;
+      return null;
+    },
+    currentElement() {
+      return null;
+    },
+    currentPointer() {
+      return null;
+    },
+    skip() {},
+    skipNode() {},
+    patch() {
+      throw new Error('Patch not implemented for IDOM text backend');
     },
   });
   return buffer;

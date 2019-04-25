@@ -1,15 +1,20 @@
 import * as IncrementalDOM from 'incremental-dom';
 
-type Void<T extends (...args: any[]) => void> = (
+type MaybeNull<T extends (...args: any[]) => any> = (
   ...args: Parameters<T>
-) => void;
+) => ReturnType<T> | null;
 
 export interface IdomImplementation {
-  elementOpenStart: Void<typeof IncrementalDOM.elementOpenStart>;
-  attr: Void<typeof IncrementalDOM.attr>;
-  elementOpenEnd: Void<typeof IncrementalDOM.elementOpenEnd>;
-  elementVoid: Void<typeof IncrementalDOM.elementVoid>;
-  elementOpen: Void<typeof IncrementalDOM.elementOpen>;
-  elementClose: Void<typeof IncrementalDOM.elementClose>;
-  text: Void<typeof IncrementalDOM.text>;
+  elementOpenStart: MaybeNull<typeof IncrementalDOM.elementOpenStart>;
+  attr: MaybeNull<typeof IncrementalDOM.attr>;
+  elementOpenEnd: MaybeNull<typeof IncrementalDOM.elementOpenEnd>;
+  elementVoid: MaybeNull<typeof IncrementalDOM.elementVoid>;
+  elementOpen: MaybeNull<typeof IncrementalDOM.elementOpen>;
+  elementClose: MaybeNull<typeof IncrementalDOM.elementClose>;
+  text: MaybeNull<typeof IncrementalDOM.text>;
+  currentElement: MaybeNull<typeof IncrementalDOM.currentElement>;
+  currentPointer: MaybeNull<typeof IncrementalDOM.currentPointer>;
+  skip: typeof IncrementalDOM.skip;
+  skipNode: typeof IncrementalDOM.skipNode;
+  patch: MaybeNull<typeof IncrementalDOM.patch>;
 }

@@ -1,3 +1,4 @@
+import { JSDOM } from 'jsdom';
 import { runIdomToText } from '../../../lib/handlebars-inc/core/backend/idom-text-backend';
 import { generateElementKey, normalizeHTMLFragment } from '../../test-helpers';
 
@@ -43,4 +44,20 @@ test('renders partial tags for non-empty elements', () => {
   });
   let expected = '<div><div class="content">Hello world!</div>';
   expect(result).toBe(expected);
+});
+
+test('returns null for currentPointer()', () => {
+  runIdomToText(idom => {
+    expect(idom.currentPointer()).toBeNull();
+  });
+  expect.assertions(1);
+});
+
+test('throws if patch() is called', () => {
+  runIdomToText(idom => {
+    expect(() => {
+      idom.patch(new JSDOM().window.document.createElement('div'), () => {});
+    }).toThrowError('Patch not implemented for IDOM text backend');
+  });
+  expect.assertions(1);
 });
